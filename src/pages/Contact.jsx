@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
-import { MessageSquare, Phone, Mail, MapPin, Send, CheckCircle2, Clock, Sparkles } from 'lucide-react';
+import { MessageSquare, Phone, Mail, MapPin, Send, CheckCircle2, Clock } from 'lucide-react';
 import { WHATSAPP_PHONE_NUMBER, CONTACT_PHONE_DISPLAY, COMPANY_EMAIL, COMPANY_ADDRESS, buildWhatsAppUrl } from '../utils/whatsapp';
+import { enquiryService } from '../services/enquiryService';
+import { useWishlist } from '../context/WishlistContext';
 
 export default function Contact() {
+  const { showToast } = useWishlist();
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -18,15 +21,29 @@ export default function Contact() {
     e.preventDefault();
     setSubmitted(true);
 
-    // Build direct WhatsApp URL from form data
+    // Register enquiry in Phase 3 backend service
+    enquiryService.addEnquiry({
+      name: formData.name,
+      phone: formData.phone,
+      email: formData.email,
+      enquiryType: formData.enquiryType,
+      quantity: formData.quantity,
+      productName: `Direct ${formData.enquiryType.toUpperCase()} Enquiry`,
+      message: formData.message
+    });
+
+    showToast('Enquiry registered! Redirecting to WhatsApp...', 'success');
+
+    // Build direct WhatsApp URL
     const url = buildWhatsAppUrl({
       product: { name: `General ${formData.enquiryType.toUpperCase()} Enquiry`, id: 'GENERAL', price: 0 },
       quantity: formData.quantity,
       message: `From: ${formData.name} (${formData.phone} / ${formData.email})\nMessage: ${formData.message}`
     });
 
-    // Automatically open WhatsApp in new tab
-    window.open(url, '_blank');
+    setTimeout(() => {
+      window.open(url, '_blank');
+    }, 800);
   };
 
   return (
@@ -50,10 +67,9 @@ export default function Contact() {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
           
-          {/* Left Column: Contact Cards & Info */}
+          {/* Left Column */}
           <div className="lg:col-span-5 space-y-6">
             
-            {/* Instant WhatsApp Quick Card */}
             <div className="glass-panel p-6 rounded-3xl border border-emerald-500/30 bg-gradient-to-br from-emerald-950/40 to-slate-900 shadow-xl space-y-4">
               <div className="flex items-center gap-3">
                 <div className="p-3 rounded-2xl bg-emerald-500/20 text-emerald-400">
@@ -76,7 +92,6 @@ export default function Contact() {
               </a>
             </div>
 
-            {/* Direct Phone & Email */}
             <div className="glass-panel p-6 rounded-3xl border border-slate-800 space-y-4">
               <div className="flex items-start gap-3">
                 <div className="p-2.5 rounded-xl bg-indigo-500/10 text-indigo-400 shrink-0">
@@ -116,7 +131,6 @@ export default function Contact() {
               </div>
             </div>
 
-            {/* Map Preview Box */}
             <div className="glass-panel p-4 rounded-3xl border border-slate-800 text-xs text-slate-400 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Clock className="w-4 h-4 text-amber-400" />
@@ -127,21 +141,21 @@ export default function Contact() {
 
           </div>
 
-          {/* Right Column: Interactive Contact Form */}
+          {/* Right Column Form */}
           <div className="lg:col-span-7">
             <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-slate-800 shadow-2xl relative">
               
               <div className="mb-6">
                 <h3 className="text-xl font-bold text-white">Send Direct Enquiry</h3>
                 <p className="text-xs text-slate-400 mt-1">
-                  Fill out the details below to generate an instant enquiry ticket or connect via WhatsApp.
+                  Fill out the details below to generate an instant enquiry ticket.
                 </p>
               </div>
 
               {submitted && (
                 <div className="mb-6 p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs flex items-center gap-2">
                   <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
-                  <span>Enquiry generated! Redirecting to WhatsApp...</span>
+                  <span>Enquiry ticket registered! Opening WhatsApp...</span>
                 </div>
               )}
 
@@ -228,7 +242,7 @@ export default function Contact() {
                   className="w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs py-3.5 rounded-xl shadow-lg shadow-indigo-600/30 transition-all"
                 >
                   <Send className="w-4 h-4" />
-                  <span>Submit & Open WhatsApp Confirmation</span>
+                  <span>Submit Ticket & Open WhatsApp</span>
                 </button>
 
               </form>

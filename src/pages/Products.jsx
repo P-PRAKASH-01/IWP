@@ -1,19 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search, SlidersHorizontal, Layers, RefreshCw, Filter } from 'lucide-react';
 import ProductCard from '../components/products/ProductCard';
-import { products } from '../data/products';
+import { productService } from '../services/productService';
 
 export default function Products() {
+  const [productsList, setProductsList] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('featured');
 
-  let filtered = products.filter((p) => {
+  useEffect(() => {
+    setProductsList(productService.getAllProducts());
+  }, []);
+
+  let filtered = productsList.filter((p) => {
     if (!searchQuery.trim()) return true;
     const q = searchQuery.toLowerCase();
     return (
       p.name.toLowerCase().includes(q) ||
-      p.material.toLowerCase().includes(q) ||
-      p.description.toLowerCase().includes(q)
+      p.material?.toLowerCase().includes(q) ||
+      p.description?.toLowerCase().includes(q)
     );
   });
 

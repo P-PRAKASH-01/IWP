@@ -1,20 +1,24 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Sparkles, ArrowRight, Search, SlidersHorizontal } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Sparkles, Search, SlidersHorizontal } from 'lucide-react';
 import ProductCard from '../products/ProductCard';
-import { products } from '../../data/products';
+import { productService } from '../../services/productService';
 
 export default function FeaturedProducts() {
+  const [productsList, setProductsList] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('featured');
 
-  let displayProducts = products.filter((p) => {
+  useEffect(() => {
+    setProductsList(productService.getAllProducts());
+  }, []);
+
+  let displayProducts = productsList.filter((p) => {
     if (!searchTerm.trim()) return true;
     const q = searchTerm.toLowerCase();
     return (
       p.name.toLowerCase().includes(q) ||
-      p.material.toLowerCase().includes(q) ||
-      p.description.toLowerCase().includes(q)
+      p.material?.toLowerCase().includes(q) ||
+      p.description?.toLowerCase().includes(q)
     );
   });
 
