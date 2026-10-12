@@ -41,7 +41,7 @@ function MainLayout({ children }) {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-slate-950 text-slate-100 selection:bg-indigo-500 selection:text-white">
+    <div className="flex flex-col min-h-screen bg-ivory text-charcoal selection:bg-olive selection:text-white">
       <Navbar onSearchOpen={() => setIsSearchOpen(true)} />
       <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
       <WishlistDrawer />

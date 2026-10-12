@@ -24,21 +24,21 @@ export default function AdminLayout({ children }) {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-950 flex flex-col font-sans">
+    <div className="min-h-screen bg-ivory flex flex-col font-sans text-charcoal">
       
       {/* Top Admin Header */}
-      <header className="bg-slate-900/90 border-b border-slate-800 backdrop-blur-md sticky top-0 z-40 px-4 sm:px-6 py-3 flex items-center justify-between">
+      <header className="bg-white border-b border-sand-300 sticky top-0 z-40 px-4 sm:px-6 py-3 flex items-center justify-between shadow-2xs">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 p-0.5">
-            <div className="w-full h-full bg-slate-950 rounded-[6px] flex items-center justify-center text-indigo-400 font-extrabold text-xs">
+          <div className="w-8 h-8 rounded-lg bg-olive p-0.5 flex items-center justify-center">
+            <span className="text-white font-extrabold text-xs">
               SSG
-            </div>
+            </span>
           </div>
           <div>
-            <span className="text-white font-bold text-sm block leading-none">
-              SRI SAI GARMENTS <span className="text-indigo-400 font-extrabold text-xs">ADMIN</span>
+            <span className="text-charcoal font-bold text-sm block leading-none">
+              SRI SAI GARMENTS <span className="text-olive font-extrabold text-xs">ADMIN</span>
             </span>
-            <span className="text-[10px] text-slate-400 font-mono">Control Panel</span>
+            <span className="text-[10px] text-charcoal-400 font-mono">Control Panel</span>
           </div>
         </div>
 
@@ -46,15 +46,15 @@ export default function AdminLayout({ children }) {
           <Link
             to="/"
             target="_blank"
-            className="hidden sm:inline-flex items-center gap-1.5 text-xs text-slate-300 hover:text-indigo-400 bg-slate-800/80 px-3 py-1.5 rounded-lg border border-slate-700 transition-colors"
+            className="hidden sm:inline-flex items-center gap-1.5 text-xs text-charcoal-700 hover:text-olive bg-sand-50 px-3 py-1.5 rounded-lg border border-sand-200 transition-colors"
           >
-            <Store className="w-3.5 h-3.5" />
+            <Store className="w-3.5 h-3.5 text-olive" />
             <span>View Live Shop</span>
           </Link>
 
           <button
             onClick={handleLogout}
-            className="flex items-center gap-1.5 text-xs text-rose-400 hover:text-rose-300 bg-rose-500/10 hover:bg-rose-500/20 px-3 py-1.5 rounded-lg border border-rose-500/30 transition-colors font-medium"
+            className="flex items-center gap-1.5 text-xs text-charcoal-700 hover:text-rose-600 bg-sand-50 hover:bg-rose-50 px-3 py-1.5 rounded-lg border border-sand-200 transition-colors font-medium"
           >
             <LogOut className="w-3.5 h-3.5" />
             <span>Logout</span>
@@ -66,8 +66,8 @@ export default function AdminLayout({ children }) {
       <div className="flex-1 flex flex-col md:flex-row">
         
         {/* Sidebar Navigation */}
-        <aside className="w-full md:w-64 bg-slate-900/40 border-r border-slate-800/80 p-4 space-y-2 shrink-0">
-          <div className="px-3 py-2 text-[10px] uppercase tracking-wider text-slate-500 font-bold">
+        <aside className="w-full md:w-64 bg-white/70 border-r border-sand-300 p-4 space-y-2 shrink-0">
+          <div className="px-3 py-2 text-[10px] uppercase tracking-wider text-charcoal-400 font-bold">
             Admin Navigation
           </div>
 
@@ -81,8 +81,8 @@ export default function AdminLayout({ children }) {
                 to={item.path}
                 className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
                   active
-                    ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/30'
-                    : 'text-slate-400 hover:bg-slate-800/80 hover:text-white'
+                    ? 'bg-olive text-white shadow-md shadow-olive/20'
+                    : 'text-charcoal-600 hover:bg-sand-100 hover:text-charcoal'
                 }`}
               >
                 <Icon className="w-4 h-4" />
@@ -93,7 +93,7 @@ export default function AdminLayout({ children }) {
         </aside>
 
         {/* Dynamic Admin View */}
-        <main className="flex-1 p-4 sm:p-6 lg:p-8 bg-slate-950 overflow-y-auto">
+        <main className="flex-1 p-4 sm:p-6 lg:p-8 bg-ivory overflow-y-auto">
           {children}
         </main>
 
