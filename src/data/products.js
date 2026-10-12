@@ -1,27 +1,44 @@
+import dress1 from '../assets/Dress/1.jpeg';
+import dress2 from '../assets/Dress/2.jpeg';
+import dress3 from '../assets/Dress/3.jpeg';
+import dress4 from '../assets/Dress/4.jpeg';
+import dress5 from '../assets/Dress/5.jpeg';
+import dress6 from '../assets/Dress/6.jpeg';
+import dress7 from '../assets/Dress/7.jpeg';
+import dress8 from '../assets/Dress/8.jpeg';
+import dress9 from '../assets/Dress/9.jpeg';
+import dress10 from '../assets/Dress/10.jpeg';
+import dress11 from '../assets/Dress/11.jpeg';
+import dress12 from '../assets/Dress/12.jpeg';
+import dress13 from '../assets/Dress/13.jpeg';
+import dress14 from '../assets/Dress/14.jpeg';
+import dress15 from '../assets/Dress/15.jpeg';
+import dress16 from '../assets/Dress/16.jpeg';
+import dress17 from '../assets/Dress/17.jpeg';
+import dress18 from '../assets/Dress/18.jpeg';
+import dress19 from '../assets/Dress/19.jpeg';
+import dress20 from '../assets/Dress/20.jpeg';
+import dress21 from '../assets/Dress/21.jpeg';
+import dress22 from '../assets/Dress/22.jpeg';
+import dress23 from '../assets/Dress/23.jpeg';
+import dress24 from '../assets/Dress/24.jpeg';
+import dress25 from '../assets/Dress/25.jpeg';
+
 export const products = [
   {
     id: "SG001",
-    name: "Classic Crewneck Organic Cotton Tee",
-    slug: "classic-crewneck-organic-cotton-tee",
+    name: "Paris Eiffel Tower Calligraphy Tee",
+    slug: "paris-eiffel-tower-calligraphy-tee",
     category: "men",
     price: 499,
     originalPrice: 799,
     rating: 4.9,
     reviewsCount: 142,
-    description: "Premium 180 GSM bio-washed 100% combed cotton crewneck t-shirt. Specially knitted in Tiruppur for ultimate breathability, shape retention, and luxury hand-feel.",
-    images: [
-      "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=1000&q=80",
-      "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?auto=format&fit=crop&w=1000&q=80",
-      "https://images.unsplash.com/photo-1618354691373-d851c5c3a990?auto=format&fit=crop&w=1000&q=80"
-    ],
-    sizes: ["S", "M", "L", "XL", "XXL"],
-    colors: [
-      { name: "Onyx Black", hex: "#090d16" },
-      { name: "Pure White", hex: "#f8fafc" },
-      { name: "Navy Blue", hex: "#1e293b" },
-      { name: "Olive Green", hex: "#3f6212" }
-    ],
-    material: "100% Combed Organic Cotton (180 GSM)",
+    description: "Premium 180 GSM bio-washed 100% combed cotton tee with artistic Eiffel Tower vintage calligraphy sketch print. Breathable and ultra-soft hand feel.",
+    images: [dress1],
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+    colors: [{'name': 'White', 'hex': '#FFFFFF'}],
+    material: "100% Combed Cotton",
     fit: "Regular Fit",
     features: [
       "Bio-washed for ultra-soft finish",
@@ -36,31 +53,24 @@ export const products = [
   },
   {
     id: "SG002",
-    name: "Heavyweight Oversized Streetwear Hoodie",
-    slug: "heavyweight-oversized-streetwear-hoodie",
+    name: "Minimalist Studio Headphones Line-Art Tee",
+    slug: "minimalist-studio-headphones-line-art-tee",
     category: "men",
-    price: 1299,
-    originalPrice: 1899,
+    price: 549,
+    originalPrice: 849,
     rating: 4.8,
-    reviewsCount: 98,
-    description: "350 GSM fleece-lined cotton blend hoodie designed for modern streetwear aesthetic. Features a double-layered hood and relaxed drop-shoulder silhouette.",
-    images: [
-      "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&w=1000&q=80",
-      "https://images.unsplash.com/photo-1578587018452-892bacefd3f2?auto=format&fit=crop&w=1000&q=80"
-    ],
-    sizes: ["M", "L", "XL"],
-    colors: [
-      { name: "Charcoal Grey", hex: "#334155" },
-      { name: "Sand Beige", hex: "#d97706" },
-      { name: "Deep Black", hex: "#0f172a" }
-    ],
-    material: "80% Combed Cotton / 20% Polyester Fleece (350 GSM)",
-    fit: "Oversized Fit",
+    reviewsCount: 115,
+    description: "Royal Blue premium cotton crewneck tee featuring clean linear acoustic headphones artwork. Modern street music aesthetic.",
+    images: [dress2],
+    sizes: ['M', 'L', 'XL', 'XXL'],
+    colors: [{'name': 'Royal Blue', 'hex': '#1D4ED8'}],
+    material: "100% Combed Cotton (180 GSM)",
+    fit: "Regular Fit",
     features: [
-      "Heavyweight plush fleece interior",
-      "Kangaroo front pouch pocket",
-      "Ribbed cuffs and elasticated waist",
-      "High-density ribbing"
+      "Bio-washed for ultra-soft finish",
+      "Pre-shrunk fabric prevents shrinkage",
+      "Double-needle stitched neck line and hem",
+      "Color-fast reactive dye"
     ],
     availability: true,
     featured: true,
@@ -69,30 +79,24 @@ export const products = [
   },
   {
     id: "SG003",
-    name: "Breathable Pique Cotton Polo Shirt",
-    slug: "breathable-pique-cotton-polo-shirt",
-    category: "men",
-    price: 799,
-    originalPrice: 1199,
-    rating: 4.7,
-    reviewsCount: 86,
-    description: "Classic smart casual polo t-shirt crafted from 220 GSM honeycomb pique cotton. Ideal for office casuals, events, or corporate uniforms.",
-    images: [
-      "https://images.unsplash.com/photo-1625910513413-5acc215b3e64?auto=format&fit=crop&w=1000&q=80",
-      "https://images.unsplash.com/photo-1586363104862-3a5e2ab60d99?auto=format&fit=crop&w=1000&q=80"
-    ],
-    sizes: ["S", "M", "L", "XL", "XXL"],
-    colors: [
-      { name: "Royal Navy", hex: "#1e3a8a" },
-      { name: "Crimson Red", hex: "#991b1b" },
-      { name: "Classic White", hex: "#ffffff" }
-    ],
-    material: "100% Pique Cotton (220 GSM)",
-    fit: "Custom Fit",
+    name: "Nickelodeon Spongebob Gang Graphic Tee",
+    slug: "nickelodeon-spongebob-gang-graphic-tee",
+    category: "kids",
+    price: 599,
+    originalPrice: 899,
+    rating: 5.0,
+    reviewsCount: 98,
+    description: "Vibrant officially styled Spongebob & Bikini Bottom characters print on pre-shrunk combed cotton jersey. Color-fast reactive dyes.",
+    images: [dress3],
+    sizes: ['XS', 'S', 'M', 'L'],
+    colors: [{'name': 'White', 'hex': '#FFFFFF'}],
+    material: "100% Organic Cotton",
+    fit: "Comfort Fit",
     features: [
-      "Flat knit collar and sleeve cuffs",
-      "2-button placket with pearlized buttons",
-      "Side vents for comfortable movement"
+      "Bio-washed for ultra-soft finish",
+      "Pre-shrunk fabric prevents shrinkage",
+      "Double-needle stitched neck line and hem",
+      "Color-fast reactive dye"
     ],
     availability: true,
     featured: true,
@@ -101,156 +105,574 @@ export const products = [
   },
   {
     id: "SG004",
-    name: "Women's Relaxed Crop Cotton Tee",
-    slug: "womens-relaxed-crop-cotton-tee",
-    category: "women",
-    price: 449,
-    originalPrice: 699,
-    rating: 4.9,
-    reviewsCount: 112,
-    description: "Trendy relaxed crop top made from lightweight 160 GSM single jersey cotton. Soft against skin with a breezy drape.",
-    images: [
-      "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=1000&q=80",
-      "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=1000&q=80"
-    ],
-    sizes: ["XS", "S", "M", "L"],
-    colors: [
-      { name: "Blush Pink", hex: "#f43f5e" },
-      { name: "Pastel Lavender", hex: "#a855f7" },
-      { name: "Off White", hex: "#f8fafc" }
-    ],
-    material: "100% Combed Cotton (160 GSM)",
-    fit: "Relaxed Boxy Fit",
+    name: "Football Coach Typography V-Neck Tee",
+    slug: "football-coach-typography-v-neck-tee",
+    category: "men",
+    price: 499,
+    originalPrice: 749,
+    rating: 4.7,
+    reviewsCount: 64,
+    description: "Sky blue cotton tee with humorous collegiate dictionary definition typography print. Breathable lightweight knit.",
+    images: [dress4],
+    sizes: ['S', 'M', 'L', 'XL'],
+    colors: [{'name': 'Sky Blue', 'hex': '#38BDF8'}],
+    material: "100% Combed Cotton",
+    fit: "Regular Fit",
     features: [
-      "Lightweight and breathable",
-      "Non-see-through weave quality",
-      "Tagless neck label for comfort"
+      "Bio-washed for ultra-soft finish",
+      "Pre-shrunk fabric prevents shrinkage",
+      "Double-needle stitched neck line and hem",
+      "Color-fast reactive dye"
     ],
     availability: true,
-    featured: true,
-    isNew: true,
+    featured: false,
+    isNew: false,
     minBulkQty: 1
   },
   {
     id: "SG005",
-    name: "Women's Soft Modal Loungewear Set",
-    slug: "womens-soft-modal-loungewear-set",
-    category: "women",
-    price: 1199,
-    originalPrice: 1699,
+    name: "All-American Aviator Mustard Graphic Tee",
+    slug: "all-american-aviator-mustard-graphic-tee",
+    category: "men",
+    price: 549,
+    originalPrice: 799,
     rating: 4.8,
-    reviewsCount: 75,
-    description: "2-piece loungewear set featuring an oversized tee and matching relaxed pants woven from premium modal cotton blend.",
-    images: [
-      "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1000&q=80"
-    ],
-    sizes: ["S", "M", "L", "XL"],
-    colors: [
-      { name: "Sage Green", hex: "#15803d" },
-      { name: "Muted Rose", hex: "#be123c" }
-    ],
-    material: "60% Cotton / 40% Modal Blend",
-    fit: "Relaxed Fit",
+    reviewsCount: 82,
+    description: "Mustard gold bio-washed cotton tee with patriotic aviator shades print. Tagless collar for irritation-free comfort.",
+    images: [dress5],
+    sizes: ['M', 'L', 'XL'],
+    colors: [{'name': 'Mustard Yellow', 'hex': '#EAB308'}],
+    material: "100% Combed Cotton (180 GSM)",
+    fit: "Regular Fit",
     features: [
-      "Silky smooth texture",
-      "Elastic waist with adjustable drawstring",
-      "Deep functional side pockets"
+      "Bio-washed for ultra-soft finish",
+      "Pre-shrunk fabric prevents shrinkage",
+      "Double-needle stitched neck line and hem",
+      "Color-fast reactive dye"
     ],
     availability: true,
-    featured: false,
+    featured: true,
     isNew: false,
     minBulkQty: 1
   },
   {
     id: "SG006",
-    name: "Kids Organic Cotton Printed Tee Pack (Set of 3)",
-    slug: "kids-organic-cotton-printed-tee-pack",
-    category: "kids",
-    price: 699,
-    originalPrice: 999,
+    name: "Walk to the Wild Trekking Graphic Tee",
+    slug: "walk-to-the-wild-trekking-graphic-tee",
+    category: "men",
+    price: 529,
+    originalPrice: 799,
     rating: 4.9,
-    reviewsCount: 64,
-    description: "Set of 3 playful printed t-shirts crafted from non-toxic, azo-free dyed 100% organic cotton for maximum kids skin safety.",
-    images: [
-      "https://images.unsplash.com/photo-1519238263530-99bdd11df2ea?auto=format&fit=crop&w=1000&q=80",
-      "https://images.unsplash.com/photo-1596870230751-ebdfce98ec42?auto=format&fit=crop&w=1000&q=80"
-    ],
-    sizes: ["2-3Y", "4-5Y", "6-7Y", "8-9Y"],
-    colors: [
-      { name: "Multi-Pack (Blue/Yellow/White)", hex: "#0284c7" }
-    ],
-    material: "100% Organic Cotton (GOTS Certified)",
-    fit: "Regular Kids Fit",
+    reviewsCount: 91,
+    description: "Outdoor adventure hiking boots graphic print on warm mustard yellow jersey cotton. Durable double-stitched hem.",
+    images: [dress6],
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+    colors: [{'name': 'Mustard Yellow', 'hex': '#EAB308'}],
+    material: "100% Combed Cotton",
+    fit: "Regular Fit",
     features: [
-      "Hypoallergenic organic yarn",
-      "Soft neck ribbing for easy dressing",
-      "Durable print withstands 50+ washes"
-    ],
-    availability: true,
-    featured: true,
-    isNew: true,
-    minBulkQty: 1
-  },
-  {
-    id: "SG007",
-    name: "Custom Corporate Bulk Promotional T-Shirt",
-    slug: "custom-corporate-bulk-promotional-t-shirt",
-    category: "bulk",
-    price: 199,
-    originalPrice: 350,
-    rating: 5.0,
-    reviewsCount: 38,
-    description: "Factory-direct bulk order garment solution. Customized with screen printing, DTF, or high-density embroidery for corporate events, marathons, & staff uniforms.",
-    images: [
-      "https://images.unsplash.com/photo-1604014237800-1c9102c219da?auto=format&fit=crop&w=1000&q=80",
-      "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=1000&q=80"
-    ],
-    sizes: ["S", "M", "L", "XL", "XXL", "3XL"],
-    colors: [
-      { name: "Custom Pantone Colors Available", hex: "#6366f1" }
-    ],
-    material: "160 - 240 GSM (Cotton / Poly Cotton / Dry-fit options)",
-    fit: "Customizable Specifications",
-    features: [
-      "MOQ: 50 pieces per design",
-      "Free design sample mockup",
-      "Direct shipment from Tiruppur manufacturing hub",
-      "Custom neck labels & swing tags included"
-    ],
-    availability: true,
-    featured: true,
-    isNew: false,
-    minBulkQty: 50
-  },
-  {
-    id: "SG008",
-    name: "Dry-Fit Performance Athletics Running Tee",
-    slug: "dry-fit-performance-athletics-running-tee",
-    category: "activewear",
-    price: 399,
-    originalPrice: 599,
-    rating: 4.8,
-    reviewsCount: 52,
-    description: "Ultra-lightweight moisture-wicking polyester mesh fabric tee designed for intense sport, marathon running, and workouts.",
-    images: [
-      "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=1000&q=80"
-    ],
-    sizes: ["S", "M", "L", "XL"],
-    colors: [
-      { name: "Electric Cyan", hex: "#06b6d4" },
-      { name: "Neon Lime", hex: "#84cc16" },
-      { name: "Stealth Black", hex: "#020617" }
-    ],
-    material: "100% Micro-Polyester Quick-Dry (140 GSM)",
-    fit: "Athletic Slim Fit",
-    features: [
-      "Sweat-wicking Dri-Tech technology",
-      "Reflective safety strip on back neck",
-      "4-way stretch mesh panels"
+      "Bio-washed for ultra-soft finish",
+      "Pre-shrunk fabric prevents shrinkage",
+      "Double-needle stitched neck line and hem",
+      "Color-fast reactive dye"
     ],
     availability: true,
     featured: false,
     isNew: true,
     minBulkQty: 1
-  }
+  },
+  {
+    id: "SG007",
+    name: "Navy Midnight Explorer Graphic Tee",
+    slug: "navy-midnight-explorer-graphic-tee",
+    category: "men",
+    price: 499,
+    originalPrice: 749,
+    rating: 4.7,
+    reviewsCount: 73,
+    description: "Deep navy combed cotton t-shirt with subtle minimalist chest artwork. Pre-washed for zero shrinkage.",
+    images: [dress7],
+    sizes: ['S', 'M', 'L', 'XL'],
+    colors: [{'name': 'Navy Blue', 'hex': '#1E3A8A'}],
+    material: "100% Combed Cotton",
+    fit: "Regular Fit",
+    features: [
+      "Bio-washed for ultra-soft finish",
+      "Pre-shrunk fabric prevents shrinkage",
+      "Double-needle stitched neck line and hem",
+      "Color-fast reactive dye"
+    ],
+    availability: true,
+    featured: false,
+    isNew: false,
+    minBulkQty: 1
+  },
+  {
+    id: "SG008",
+    name: "Heather Grey Urban Streetwear Tee",
+    slug: "heather-grey-urban-streetwear-tee",
+    category: "men",
+    price: 479,
+    originalPrice: 699,
+    rating: 4.8,
+    reviewsCount: 89,
+    description: "Melange grey cotton-poly blend for enhanced breathability and athletic drape. Ideal for daily casual wear.",
+    images: [dress8],
+    sizes: ['M', 'L', 'XL', 'XXL'],
+    colors: [{'name': 'Heather Grey', 'hex': '#9CA3AF'}],
+    material: "80% Cotton / 20% Polyester",
+    fit: "Regular Fit",
+    features: [
+      "Bio-washed for ultra-soft finish",
+      "Pre-shrunk fabric prevents shrinkage",
+      "Double-needle stitched neck line and hem",
+      "Color-fast reactive dye"
+    ],
+    availability: true,
+    featured: true,
+    isNew: false,
+    minBulkQty: 1
+  },
+  {
+    id: "SG009",
+    name: "Stealth Black Performance Athletic Tee",
+    slug: "stealth-black-performance-athletic-tee",
+    category: "activewear",
+    price: 499,
+    originalPrice: 799,
+    rating: 4.9,
+    reviewsCount: 104,
+    description: "Jet black quick-dry active t-shirt engineered with micro-ventilation fibers. Lightweight and sweat-wicking.",
+    images: [dress9],
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+    colors: [{'name': 'Black', 'hex': '#111827'}],
+    material: "Micro-Polyester Quick-Dry",
+    fit: "Athletic Fit",
+    features: [
+      "Bio-washed for ultra-soft finish",
+      "Pre-shrunk fabric prevents shrinkage",
+      "Double-needle stitched neck line and hem",
+      "Color-fast reactive dye"
+    ],
+    availability: true,
+    featured: true,
+    isNew: true,
+    minBulkQty: 1
+  },
+  {
+    id: "SG010",
+    name: "New York City High-Visibility Graphic Tee",
+    slug: "new-york-city-high-visibility-graphic-tee",
+    category: "men",
+    price: 549,
+    originalPrice: 849,
+    rating: 4.8,
+    reviewsCount: 77,
+    description: "Electric lime yellow cotton tee with Statue of Liberty and Brooklyn Bridge photographic montage print.",
+    images: [dress10],
+    sizes: ['S', 'M', 'L', 'XL'],
+    colors: [{'name': 'Neon Lime', 'hex': '#A3E635'}],
+    material: "100% Combed Cotton",
+    fit: "Regular Fit",
+    features: [
+      "Bio-washed for ultra-soft finish",
+      "Pre-shrunk fabric prevents shrinkage",
+      "Double-needle stitched neck line and hem",
+      "Color-fast reactive dye"
+    ],
+    availability: true,
+    featured: true,
+    isNew: true,
+    minBulkQty: 1
+  },
+  {
+    id: "SG011",
+    name: "Cobalt Blue Athletic Training Tee",
+    slug: "cobalt-blue-athletic-training-tee",
+    category: "activewear",
+    price: 449,
+    originalPrice: 699,
+    rating: 4.7,
+    reviewsCount: 56,
+    description: "Cobalt blue performance dry-fit tee designed for gym workouts, jogging, and outdoor sports. 4-way stretch weave.",
+    images: [dress11],
+    sizes: ['M', 'L', 'XL'],
+    colors: [{'name': 'Cobalt Blue', 'hex': '#2563EB'}],
+    material: "Micro-Polyester Quick-Dry",
+    fit: "Athletic Fit",
+    features: [
+      "Bio-washed for ultra-soft finish",
+      "Pre-shrunk fabric prevents shrinkage",
+      "Double-needle stitched neck line and hem",
+      "Color-fast reactive dye"
+    ],
+    availability: true,
+    featured: false,
+    isNew: false,
+    minBulkQty: 1
+  },
+  {
+    id: "SG012",
+    name: "Fender Vintage 1946 Badge Sand Tee",
+    slug: "fender-vintage-1946-badge-sand-tee",
+    category: "men",
+    price: 599,
+    originalPrice: 899,
+    rating: 4.9,
+    reviewsCount: 128,
+    description: "Earthy sand khaki vintage guitar emblem print on premium bio-washed cotton. Retro music lover essential.",
+    images: [dress12],
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+    colors: [{'name': 'Sand Beige', 'hex': '#D4B996'}],
+    material: "100% Combed Cotton",
+    fit: "Regular Fit",
+    features: [
+      "Bio-washed for ultra-soft finish",
+      "Pre-shrunk fabric prevents shrinkage",
+      "Double-needle stitched neck line and hem",
+      "Color-fast reactive dye"
+    ],
+    availability: true,
+    featured: true,
+    isNew: true,
+    minBulkQty: 1
+  },
+  {
+    id: "SG013",
+    name: "Charcoal Black Classic Heavyweight Tee",
+    slug: "charcoal-black-classic-heavyweight-tee",
+    category: "men",
+    price: 499,
+    originalPrice: 749,
+    rating: 4.8,
+    reviewsCount: 94,
+    description: "Heavyweight 200 GSM charcoal black combed cotton t-shirt. Substantial structure with soft enzyme finish.",
+    images: [dress13],
+    sizes: ['S', 'M', 'L', 'XL', 'XXL', 'XXXL'],
+    colors: [{'name': 'Charcoal', 'hex': '#292A26'}],
+    material: "100% Combed Cotton (200 GSM)",
+    fit: "Regular Fit",
+    features: [
+      "Bio-washed for ultra-soft finish",
+      "Pre-shrunk fabric prevents shrinkage",
+      "Double-needle stitched neck line and hem",
+      "Color-fast reactive dye"
+    ],
+    availability: true,
+    featured: false,
+    isNew: false,
+    minBulkQty: 1
+  },
+  {
+    id: "SG014",
+    name: "Deep Onyx Premium Everyday Tee",
+    slug: "deep-onyx-premium-everyday-tee",
+    category: "men",
+    price: 449,
+    originalPrice: 699,
+    rating: 4.9,
+    reviewsCount: 110,
+    description: "Silky-smooth staple black tee with reinforced neckline ribbing. High colorfastness retains black shade through dozens of washes.",
+    images: [dress14],
+    sizes: ['M', 'L', 'XL'],
+    colors: [{'name': 'Black', 'hex': '#111827'}],
+    material: "100% Combed Cotton",
+    fit: "Regular Fit",
+    features: [
+      "Bio-washed for ultra-soft finish",
+      "Pre-shrunk fabric prevents shrinkage",
+      "Double-needle stitched neck line and hem",
+      "Color-fast reactive dye"
+    ],
+    availability: true,
+    featured: false,
+    isNew: false,
+    minBulkQty: 1
+  },
+  {
+    id: "SG015",
+    name: "Dreams Come True Floral Coral Tee",
+    slug: "dreams-come-true-floral-coral-tee",
+    category: "women",
+    price: 549,
+    originalPrice: 799,
+    rating: 4.9,
+    reviewsCount: 85,
+    description: "Dusty rose coral tee featuring hibiscus floral typography artwork. Feminine and cheerful summer staple.",
+    images: [dress15],
+    sizes: ['XS', 'S', 'M', 'L'],
+    colors: [{'name': 'Dusty Rose', 'hex': '#F43F5E'}],
+    material: "Modal Cotton Blend",
+    fit: "Relaxed Fit",
+    features: [
+      "Bio-washed for ultra-soft finish",
+      "Pre-shrunk fabric prevents shrinkage",
+      "Double-needle stitched neck line and hem",
+      "Color-fast reactive dye"
+    ],
+    availability: true,
+    featured: true,
+    isNew: true,
+    minBulkQty: 1
+  },
+  {
+    id: "SG016",
+    name: "Marine Blue Nautical Horizon Tee",
+    slug: "marine-blue-nautical-horizon-tee",
+    category: "men",
+    price: 479,
+    originalPrice: 699,
+    rating: 4.7,
+    reviewsCount: 61,
+    description: "Marine blue cotton tee with understated chest graphic. Lightweight and breathable for tropical temperatures.",
+    images: [dress16],
+    sizes: ['S', 'M', 'L', 'XL'],
+    colors: [{'name': 'Navy Blue', 'hex': '#1E3A8A'}],
+    material: "100% Combed Cotton",
+    fit: "Regular Fit",
+    features: [
+      "Bio-washed for ultra-soft finish",
+      "Pre-shrunk fabric prevents shrinkage",
+      "Double-needle stitched neck line and hem",
+      "Color-fast reactive dye"
+    ],
+    availability: true,
+    featured: false,
+    isNew: false,
+    minBulkQty: 1
+  },
+  {
+    id: "SG017",
+    name: "Gunmetal Grey Comfort Fit Tee",
+    slug: "gunmetal-grey-comfort-fit-tee",
+    category: "men",
+    price: 449,
+    originalPrice: 649,
+    rating: 4.6,
+    reviewsCount: 49,
+    description: "Gunmetal grey combed cotton t-shirt with smooth hand feel and pre-shrunk construction.",
+    images: [dress17],
+    sizes: ['M', 'L', 'XL'],
+    colors: [{'name': 'Grey', 'hex': '#6B7280'}],
+    material: "100% Combed Cotton",
+    fit: "Comfort Fit",
+    features: [
+      "Bio-washed for ultra-soft finish",
+      "Pre-shrunk fabric prevents shrinkage",
+      "Double-needle stitched neck line and hem",
+      "Color-fast reactive dye"
+    ],
+    availability: true,
+    featured: false,
+    isNew: false,
+    minBulkQty: 1
+  },
+  {
+    id: "SG018",
+    name: "Slate Navy Casual Daily Tee",
+    slug: "slate-navy-casual-daily-tee",
+    category: "men",
+    price: 479,
+    originalPrice: 699,
+    rating: 4.8,
+    reviewsCount: 78,
+    description: "Versatile slate blue-grey hue crafted from bio-washed Tiruppur combed cotton. Tag-free comfort.",
+    images: [dress18],
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+    colors: [{'name': 'Navy Blue', 'hex': '#1E3A8A'}],
+    material: "100% Combed Cotton",
+    fit: "Regular Fit",
+    features: [
+      "Bio-washed for ultra-soft finish",
+      "Pre-shrunk fabric prevents shrinkage",
+      "Double-needle stitched neck line and hem",
+      "Color-fast reactive dye"
+    ],
+    availability: true,
+    featured: false,
+    isNew: false,
+    minBulkQty: 1
+  },
+  {
+    id: "SG019",
+    name: "Steel Grey Essential Crewneck",
+    slug: "steel-grey-essential-crewneck",
+    category: "men",
+    price: 429,
+    originalPrice: 649,
+    rating: 4.7,
+    reviewsCount: 53,
+    description: "Understated steel grey crewneck with flatlock seam detailing. Perfect base layer or standalone casual tee.",
+    images: [dress19],
+    sizes: ['S', 'M', 'L', 'XL'],
+    colors: [{'name': 'Grey', 'hex': '#6B7280'}],
+    material: "100% Combed Cotton",
+    fit: "Regular Fit",
+    features: [
+      "Bio-washed for ultra-soft finish",
+      "Pre-shrunk fabric prevents shrinkage",
+      "Double-needle stitched neck line and hem",
+      "Color-fast reactive dye"
+    ],
+    availability: true,
+    featured: false,
+    isNew: false,
+    minBulkQty: 1
+  },
+  {
+    id: "SG020",
+    name: "Graphite Grey Casual Lounge Tee",
+    slug: "graphite-grey-casual-lounge-tee",
+    category: "men",
+    price: 459,
+    originalPrice: 679,
+    rating: 4.8,
+    reviewsCount: 67,
+    description: "Medium-weight graphite grey jersey cotton. Relaxed cut for all-day weekend lounging.",
+    images: [dress20],
+    sizes: ['M', 'L', 'XL', 'XXL'],
+    colors: [{'name': 'Grey', 'hex': '#6B7280'}],
+    material: "100% Combed Cotton",
+    fit: "Comfort Fit",
+    features: [
+      "Bio-washed for ultra-soft finish",
+      "Pre-shrunk fabric prevents shrinkage",
+      "Double-needle stitched neck line and hem",
+      "Color-fast reactive dye"
+    ],
+    availability: true,
+    featured: false,
+    isNew: false,
+    minBulkQty: 1
+  },
+  {
+    id: "SG021",
+    name: "Geometric & Plaid Lounge Shorts (Set of 5)",
+    slug: "geometric-and-plaid-lounge-shorts-set-of-5",
+    category: "bulk",
+    price: 999,
+    originalPrice: 1499,
+    rating: 5.0,
+    reviewsCount: 164,
+    description: "5-pack printed cotton lounge shorts featuring geometric patterns and tartans with elastic waistband and drawstrings.",
+    images: [dress21],
+    sizes: ['M', 'L', 'XL', 'XXL'],
+    colors: [{'name': 'Navy Blue', 'hex': '#1E3A8A'}, {'name': 'Black', 'hex': '#111827'}],
+    material: "100% Breathable Cotton",
+    fit: "Relaxed Shorts",
+    features: [
+      "Bio-washed for ultra-soft finish",
+      "Pre-shrunk fabric prevents shrinkage",
+      "Double-needle stitched neck line and hem",
+      "Color-fast reactive dye"
+    ],
+    availability: true,
+    featured: true,
+    isNew: true,
+    minBulkQty: 1
+  },
+  {
+    id: "SG022",
+    name: "Midnight Athletic Performance Tee",
+    slug: "midnight-athletic-performance-tee",
+    category: "activewear",
+    price: 469,
+    originalPrice: 699,
+    rating: 4.7,
+    reviewsCount: 42,
+    description: "Lightweight breathable sports top engineered for runners and gym enthusiasts with sweat dispersion technology.",
+    images: [dress22],
+    sizes: ['S', 'M', 'L', 'XL'],
+    colors: [{'name': 'Black', 'hex': '#111827'}],
+    material: "Micro-Polyester Quick-Dry",
+    fit: "Athletic Fit",
+    features: [
+      "Bio-washed for ultra-soft finish",
+      "Pre-shrunk fabric prevents shrinkage",
+      "Double-needle stitched neck line and hem",
+      "Color-fast reactive dye"
+    ],
+    availability: true,
+    featured: false,
+    isNew: false,
+    minBulkQty: 1
+  },
+  {
+    id: "SG023",
+    name: "Slate Blue Active Sport Tee",
+    slug: "slate-blue-active-sport-tee",
+    category: "activewear",
+    price: 489,
+    originalPrice: 729,
+    rating: 4.8,
+    reviewsCount: 59,
+    description: "Comfortable quick-drying athletic tee with ergonomic raglan seams that prevent chafing during movement.",
+    images: [dress23],
+    sizes: ['M', 'L', 'XL'],
+    colors: [{'name': 'Navy Blue', 'hex': '#1E3A8A'}],
+    material: "Micro-Polyester Quick-Dry",
+    fit: "Athletic Fit",
+    features: [
+      "Bio-washed for ultra-soft finish",
+      "Pre-shrunk fabric prevents shrinkage",
+      "Double-needle stitched neck line and hem",
+      "Color-fast reactive dye"
+    ],
+    availability: true,
+    featured: false,
+    isNew: false,
+    minBulkQty: 1
+  },
+  {
+    id: "SG024",
+    name: "Classic Shadow Black Essential Tee",
+    slug: "classic-shadow-black-essential-tee",
+    category: "men",
+    price: 439,
+    originalPrice: 649,
+    rating: 4.8,
+    reviewsCount: 88,
+    description: "Everyday essential crewneck in solid shadow black. Made from compact spun combed yarn for reduced pilling.",
+    images: [dress24],
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+    colors: [{'name': 'Black', 'hex': '#111827'}],
+    material: "100% Combed Cotton",
+    fit: "Regular Fit",
+    features: [
+      "Bio-washed for ultra-soft finish",
+      "Pre-shrunk fabric prevents shrinkage",
+      "Double-needle stitched neck line and hem",
+      "Color-fast reactive dye"
+    ],
+    availability: true,
+    featured: false,
+    isNew: false,
+    minBulkQty: 1
+  },
+  {
+    id: "SG025",
+    name: "Sport Multi-Color Drawstring Shorts (Set of 5)",
+    slug: "sport-multi-color-drawstring-shorts-set-of-5",
+    category: "bulk",
+    price: 1099,
+    originalPrice: 1699,
+    rating: 4.9,
+    reviewsCount: 137,
+    description: "5-pack athletic training shorts with zippered side pockets, contrast typography, and secure drawcord elastic waist.",
+    images: [dress25],
+    sizes: ['M', 'L', 'XL', 'XXL'],
+    colors: [{'name': 'Grey', 'hex': '#6B7280'}, {'name': 'Black', 'hex': '#111827'}],
+    material: "Micro-Polyester Quick-Dry",
+    fit: "Athletic Shorts",
+    features: [
+      "Bio-washed for ultra-soft finish",
+      "Pre-shrunk fabric prevents shrinkage",
+      "Double-needle stitched neck line and hem",
+      "Color-fast reactive dye"
+    ],
+    availability: true,
+    featured: true,
+    isNew: true,
+    minBulkQty: 1
+  },
 ];

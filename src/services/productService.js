@@ -1,18 +1,21 @@
 import { products as initialProducts } from '../data/products';
 
-const STORAGE_KEY = 'ssg_products_data';
+const STORAGE_KEY = 'ssg_products_studio_v3';
 
 // Initialize products in LocalStorage if not present
 function getStoredProducts() {
   try {
     const data = localStorage.getItem(STORAGE_KEY);
     if (data) {
-      return JSON.parse(data);
+      const parsed = JSON.parse(data);
+      if (Array.isArray(parsed) && parsed.length >= 20) {
+        return parsed;
+      }
     }
   } catch (e) {
     console.error('Failed to parse stored products', e);
   }
-  // Fallback to initial dataset
+  // Initialize with the 25 studio dress products
   localStorage.setItem(STORAGE_KEY, JSON.stringify(initialProducts));
   return initialProducts;
 }

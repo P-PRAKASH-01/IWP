@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Dress image processing
+src/assets/Dress/originals/
+batch_process_dress.py
