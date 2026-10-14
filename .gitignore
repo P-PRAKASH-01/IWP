@@ -26,3 +26,6 @@ dist-ssr
 # Dress image processing
 src/assets/Dress/originals/
 batch_process_dress.py
+.env
+.env.*
+!.env.example
