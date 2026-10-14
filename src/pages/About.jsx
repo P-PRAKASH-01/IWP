@@ -1,9 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Factory, ShieldCheck, Award, Users, MapPin, MessageSquare, CheckCircle, ArrowRight } from 'lucide-react';
-import { WHATSAPP_PHONE_NUMBER, COMPANY_ADDRESS } from '../utils/whatsapp';
+import { Factory, MapPin, MessageSquare, CheckCircle, ArrowRight } from 'lucide-react';
+import { COMPANY_ADDRESS } from '../utils/whatsapp';
+import { useStore } from '../context/StoreContext';
 
 export default function About() {
+  const { settings, settingsConfigured } = useStore();
   return (
     <div className="min-h-screen bg-ivory pt-28 pb-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -19,7 +21,7 @@ export default function About() {
           </h1>
 
           <p className="text-charcoal-600 text-sm sm:text-base leading-relaxed">
-            Sri Sai Garments is dedicated to producing high-grade cotton garments, casual wear, and custom bulk uniforms. We bridge retail buyers and wholesale clients with direct factory manufacturing in Tiruppur.
+            {settings.about || `${settings.businessName} shares garment information and enquiries through this catalogue.`}
           </p>
         </div>
 
@@ -125,12 +127,12 @@ export default function About() {
           </h2>
 
           <p className="text-charcoal-600 text-xs sm:text-sm max-w-xl mx-auto">
-            {COMPANY_ADDRESS}
+            {settingsConfigured ? settings.address : settings.address || COMPANY_ADDRESS}
           </p>
 
           <div className="pt-2 flex flex-wrap justify-center gap-4">
             <a
-              href={`https://wa.me/${WHATSAPP_PHONE_NUMBER}?text=${encodeURIComponent('Hello Sri Sai Garments! I would like to visit or ask questions about your garments.')}`}
+              href={settings.whatsapp ? `https://wa.me/${String(settings.whatsapp).replace(/\D/g, '')}?text=${encodeURIComponent(`Hello ${settings.businessName}! I would like to visit or ask questions about your garments.`)}` : '/contact'}
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center gap-2 bg-olive hover:bg-olive-600 text-white font-bold text-xs px-6 py-3.5 rounded-2xl shadow-lg shadow-olive/20 transition-all"

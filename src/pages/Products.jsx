@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { 
   Search, 
   SlidersHorizontal, 
@@ -8,10 +9,10 @@ import {
   ChevronUp, 
   Star, 
   X,
-  Layers
 } from 'lucide-react';
 import ProductCard from '../components/products/ProductCard';
 import { productService } from '../services/productService';
+import { storeService } from '../services/storeService';
 
 const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'];
 
@@ -37,7 +38,10 @@ const FABRICS = [
 ];
 
 export default function Products() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const categoryFromUrl = searchParams.get('category') || '';
   const [productsList, setProductsList] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('featured');
   const [selectedSize, setSelectedSize] = useState(null);
@@ -45,7 +49,10 @@ export default function Products() {
   const [maxPrice, setMaxPrice] = useState(2000);
   const [selectedRating, setSelectedRating] = useState(null);
   const [selectedFabric, setSelectedFabric] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState(categoryFromUrl);
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState('');
 
   // Accordion collapse states
   const [openSections, setOpenSections] = useState({
@@ -57,8 +64,20 @@ export default function Products() {
   });
 
   useEffect(() => {
-    setProductsList(productService.getAllProducts());
+    let active = true;
+    Promise.all([productService.getAllProducts(), storeService.getCategories()])
+      .then(([products, categoryRows]) => {
+        if (active) {
+          setProductsList(products);
+          setCategories(categoryRows);
+        }
+      })
+      .catch((error) => { if (active) setLoadError(error.message || 'Products could not be loaded.'); })
+      .finally(() => { if (active) setLoading(false); });
+    return () => { active = false; };
   }, []);
+
+  useEffect(() => setSelectedCategory(categoryFromUrl), [categoryFromUrl]);
 
   const toggleSection = (section) => {
     setOpenSections((prev) => ({
@@ -74,6 +93,7 @@ export default function Products() {
     maxPrice < 2000 ||
     Boolean(selectedRating) ||
     Boolean(selectedFabric) ||
+    Boolean(selectedCategory) ||
     sortBy !== 'featured';
 
   const resetAllFilters = () => {
@@ -84,10 +104,16 @@ export default function Products() {
     setMaxPrice(2000);
     setSelectedRating(null);
     setSelectedFabric(null);
+    setSelectedCategory('');
+    setSearchParams((params) => {
+      params.delete('category');
+      return params;
+    });
   };
 
   // Filter products
   let filtered = productsList.filter((p) => {
+    if (selectedCategory && p.category !== selectedCategory) return false;
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
       const match =
@@ -136,9 +162,9 @@ export default function Products() {
 
   // Sort products
   if (sortBy === 'price-low') {
-    filtered.sort((a, b) => a.price - b.price);
+    filtered.sort((a, b) => (a.price ?? Number.MAX_SAFE_INTEGER) - (b.price ?? Number.MAX_SAFE_INTEGER));
   } else if (sortBy === 'price-high') {
-    filtered.sort((a, b) => b.price - a.price);
+    filtered.sort((a, b) => (b.price ?? 0) - (a.price ?? 0));
   } else if (sortBy === 'rating') {
     filtered.sort((a, b) => b.rating - a.rating);
   } else if (sortBy === 'newest') {
@@ -446,6 +472,26 @@ export default function Products() {
                 />
               </div>
 
+              <label className="w-full sm:w-52 text-xs font-semibold">
+                <span className="sr-only">Filter by category</span>
+                <select
+                  value={selectedCategory}
+                  onChange={(event) => {
+                    const nextCategory = event.target.value;
+                    setSelectedCategory(nextCategory);
+                    setSearchParams((params) => {
+                      if (nextCategory) params.set('category', nextCategory);
+                      else params.delete('category');
+                      return params;
+                    });
+                  }}
+                  className="w-full bg-sand-50/80 text-charcoal text-xs font-semibold px-2.5 py-2 rounded-xl border border-sand-200"
+                >
+                  <option value="">All categories</option>
+                  {categories.map((item) => <option key={item.id} value={item.slug}>{item.name}</option>)}
+                </select>
+              </label>
+
               {/* Sort & Clear Filters */}
               <div className="flex items-center justify-between sm:justify-end gap-4 w-full sm:w-auto">
                 <div className="flex items-center gap-1.5">
@@ -476,7 +522,10 @@ export default function Products() {
             </div>
 
             {/* 3-Column Product Grid */}
-            {filtered.length > 0 ? (
+            {loadError && <p role="alert" className="mb-4 rounded-xl border border-rose-200 bg-rose-50 p-3 text-sm text-rose-800">{loadError}</p>}
+            {loading ? (
+              <p role="status" className="rounded-2xl border border-sand-300 bg-white p-12 text-center text-sm text-charcoal-600">Loading catalogue…</p>
+            ) : filtered.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filtered.map((product) => (
                   <ProductCard key={product.id} product={product} />
@@ -487,7 +536,7 @@ export default function Products() {
                 <Filter className="w-10 h-10 text-sand-400 mx-auto mb-3" />
                 <h3 className="text-charcoal font-bold text-lg">No Garments Match</h3>
                 <p className="text-charcoal-500 text-xs mt-1">
-                  Try adjusting or clearing your size, color, or price filters.
+                  {productsList.length ? 'Try adjusting or clearing your size, color, or price filters.' : 'No published products are available yet.'}
                 </p>
                 <button
                   onClick={resetAllFilters}

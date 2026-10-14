@@ -1,29 +1,132 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import { isSupabaseConfigured, supabase } from '../services/supabase';
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(() => {
-    return sessionStorage.getItem('ssg_admin_auth') === 'true';
-  });
+  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const login = (username, password) => {
-    // Demo admin credentials
-    if (username === 'admin' && password === 'password123') {
-      sessionStorage.setItem('ssg_admin_auth', 'true');
-      setIsAdminLoggedIn(true);
-      return { success: true };
+  useEffect(() => {
+    if (!supabase) {
+      setIsLoading(false);
+      return undefined;
     }
-    return { success: false, message: 'Invalid admin username or password!' };
+
+    let active = true;
+    const checkAdmin = async (user) => {
+      if (!user) {
+        if (active) {
+          setIsAdminLoggedIn(false);
+          setIsLoading(false);
+        }
+        return;
+      }
+
+      const { data, error } = await supabase
+        .from('admin_profiles')
+        .select('user_id')
+        .eq('user_id', user.id)
+        .maybeSingle();
+
+      if (error) {
+        console.error('Unable to verify admin access:', error.message);
+      }
+      if (active) {
+        setIsAdminLoggedIn(!error && Boolean(data));
+        setIsLoading(false);
+      }
+    };
+
+    supabase.auth.getSession().then(({ data, error }) => {
+      if (error) console.error('Unable to restore admin session:', error.message);
+      void checkAdmin(data?.session?.user);
+    });
+
+    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
+      setIsLoading(true);
+      window.setTimeout(() => {
+        void checkAdmin(session?.user);
+      }, 0);
+    });
+
+    return () => {
+      active = false;
+      authListener.subscription.unsubscribe();
+    };
+  }, []);
+
+  const login = async (email, password) => {
+    if (!isSupabaseConfigured || !supabase) {
+      return { success: false, message: 'Admin sign-in is unavailable until Supabase is configured.' };
+    }
+
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) return { success: false, message: error.message };
+
+    const { data: profile, error: profileError } = await supabase
+      .from('admin_profiles')
+      .select('user_id')
+      .eq('user_id', data.user.id)
+      .maybeSingle();
+
+    if (profileError || !profile) {
+      const { error: signOutError } = await supabase.auth.signOut();
+      return {
+        success: false,
+        message: signOutError
+          ? `This account is not authorized, and its session could not be cleared: ${signOutError.message}`
+          : profileError?.message || 'This account is not authorized to administer the store.'
+      };
+    }
+
+    setIsAdminLoggedIn(true);
+    return { success: true };
   };
 
-  const logout = () => {
-    sessionStorage.removeItem('ssg_admin_auth');
+  const logout = async () => {
+    if (!supabase) return;
+    const { error } = await supabase.auth.signOut();
+    if (error) throw error;
     setIsAdminLoggedIn(false);
   };
 
+  const resetPassword = async (email) => {
+    if (!supabase) {
+      return { success: false, message: 'Password reset requires a configured Supabase project.' };
+    }
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/admin/login?mode=recovery`
+    });
+    return error
+      ? { success: false, message: error.message }
+      : { success: true, message: 'If an account exists, a password reset email has been sent.' };
+  };
+
+  const updatePassword = async (password) => {
+    if (!supabase) return { success: false, message: 'Password reset requires a configured Supabase project.' };
+    const { data, error } = await supabase.auth.updateUser({ password });
+    if (error) return { success: false, message: error.message };
+    const { data: profile, error: profileError } = await supabase
+      .from('admin_profiles')
+      .select('user_id')
+      .eq('user_id', data.user.id)
+      .maybeSingle();
+    if (profileError || !profile) {
+      const { error: signOutError } = await supabase.auth.signOut();
+      return {
+        success: false,
+        message: signOutError
+          ? `This account is not authorized, and its session could not be cleared: ${signOutError.message}`
+          : profileError?.message || 'This account is not authorized to administer the store.'
+      };
+    }
+    setIsAdminLoggedIn(true);
+    return { success: true };
+  };
+
   return (
-    <AuthContext.Provider value={{ isAdminLoggedIn, login, logout }}>
+    <AuthContext.Provider value={{ isAdminLoggedIn, isLoading, login, logout, resetPassword, updatePassword }}>
       {children}
     </AuthContext.Provider>
   );

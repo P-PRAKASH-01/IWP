@@ -3,17 +3,23 @@ import { Link } from 'react-router-dom';
 import Hero from '../components/home/Hero';
 import FeaturedProducts from '../components/home/FeaturedProducts';
 import { Factory, MessageSquare, ArrowRight, Award, CheckCircle } from 'lucide-react';
-import { WHATSAPP_PHONE_NUMBER } from '../utils/whatsapp';
+import CategorySection from '../components/home/CategorySection';
+import ActiveBanners from '../components/home/ActiveBanners';
+import { useStore } from '../context/StoreContext';
 
 export default function Home() {
+  const { settings } = useStore();
   return (
     <div className="min-h-screen bg-ivory">
       
       {/* 1. Hero Section */}
       <Hero />
 
+      <ActiveBanners />
+
       {/* 2. Direct All Garments Catalogue Grid */}
       <FeaturedProducts />
+      <CategorySection />
 
       {/* 3. Manufacturing & Bulk Order Showcase Banner */}
       <section className="py-20 bg-sand-100/80 relative overflow-hidden border-t border-sand-300">
@@ -55,7 +61,7 @@ export default function Home() {
 
               <div className="pt-2 flex flex-wrap gap-4">
                 <a
-                  href={`https://wa.me/${WHATSAPP_PHONE_NUMBER}?text=${encodeURIComponent('Hello Sri Sai Garments! I would like to request a quotation for custom bulk manufacturing.')}`}
+                  href={settings.whatsapp ? `https://wa.me/${String(settings.whatsapp).replace(/\D/g, '')}?text=${encodeURIComponent(`Hello ${settings.businessName}! I would like to request a quotation for custom bulk manufacturing.`)}` : '/contact'}
                   target="_blank"
                   rel="noreferrer"
                   className="inline-flex items-center gap-2 bg-olive hover:bg-olive-600 text-white font-bold text-sm px-6 py-3.5 rounded-2xl shadow-lg shadow-olive/20 transition-all"

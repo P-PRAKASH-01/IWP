@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { MessageSquare, Phone, Mail, MapPin, Send, CheckCircle2, Clock } from 'lucide-react';
-import { WHATSAPP_PHONE_NUMBER, CONTACT_PHONE_DISPLAY, COMPANY_EMAIL, COMPANY_ADDRESS, buildWhatsAppUrl } from '../utils/whatsapp';
+import { buildWhatsAppUrl } from '../utils/whatsapp';
 import { enquiryService } from '../services/enquiryService';
 import { useWishlist } from '../context/WishlistContext';
+import { useStore } from '../context/StoreContext';
 
 export default function Contact() {
   const { showToast } = useWishlist();
+  const { settings } = useStore();
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -16,34 +18,42 @@ export default function Contact() {
   });
 
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
+  const [whatsappUrl, setWhatsappUrl] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitted(true);
-
-    // Register enquiry in Phase 3 backend service
-    enquiryService.addEnquiry({
-      name: formData.name,
-      phone: formData.phone,
-      email: formData.email,
-      enquiryType: formData.enquiryType,
-      quantity: formData.quantity,
-      productName: `Direct ${formData.enquiryType.toUpperCase()} Enquiry`,
-      message: formData.message
-    });
-
-    showToast('Enquiry registered! Redirecting to WhatsApp...', 'success');
-
-    // Build direct WhatsApp URL
-    const url = buildWhatsAppUrl({
-      product: { name: `General ${formData.enquiryType.toUpperCase()} Enquiry`, id: 'GENERAL', price: 0 },
-      quantity: formData.quantity,
-      message: `From: ${formData.name} (${formData.phone} / ${formData.email})\nMessage: ${formData.message}`
-    });
-
-    setTimeout(() => {
-      window.open(url, '_blank');
-    }, 800);
+    setSubmitError('');
+    setSubmitting(true);
+    const whatsappWindow = window.open('', '_blank');
+    try {
+      await enquiryService.addEnquiry({
+        name: formData.name,
+        phone: formData.phone,
+        email: formData.email,
+        enquiryType: formData.enquiryType,
+        quantity: formData.quantity,
+        productName: `Direct ${formData.enquiryType.toUpperCase()} Enquiry`,
+        message: formData.message
+      });
+      const url = buildWhatsAppUrl({
+        product: { name: `General ${formData.enquiryType.toUpperCase()} Enquiry`, id: 'GENERAL' },
+        quantity: formData.quantity,
+        message: `From: ${formData.name} (${formData.phone}${formData.email ? ` / ${formData.email}` : ''})\nMessage: ${formData.message}`,
+        phoneNumber: settings.whatsapp,
+        businessName: settings.businessName
+      });
+      setWhatsappUrl(url);
+      setSubmitted(true);
+      showToast('Enquiry saved. Continue the conversation on WhatsApp.', 'success');
+      if (whatsappWindow) whatsappWindow.location.href = url;
+    } catch (error) {
+      if (whatsappWindow) whatsappWindow.close();
+      setSubmitError(error.message || 'Your enquiry could not be saved. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -82,7 +92,7 @@ export default function Contact() {
               </div>
 
               <a
-                href={`https://wa.me/${WHATSAPP_PHONE_NUMBER}?text=${encodeURIComponent('Hello Sri Sai Garments! I would like to inquire about your product catalog.')}`}
+                href={settings.whatsapp ? `https://wa.me/${String(settings.whatsapp).replace(/\D/g, '')}?text=${encodeURIComponent(`Hello ${settings.businessName}! I would like to inquire about your product catalog.`)}` : '/contact'}
                 target="_blank"
                 rel="noreferrer"
                 className="w-full flex items-center justify-center gap-2 bg-olive hover:bg-olive-600 text-white font-bold text-xs py-3.5 rounded-xl shadow-md shadow-olive/20 transition-all"
@@ -99,10 +109,10 @@ export default function Contact() {
                 </div>
                 <div>
                   <h4 className="text-charcoal font-semibold text-sm">Direct Phone</h4>
-                  <a href={`tel:${CONTACT_PHONE_DISPLAY}`} className="text-xs text-olive font-medium hover:underline">
-                    {CONTACT_PHONE_DISPLAY}
-                  </a>
-                  <p className="text-[11px] text-charcoal-400 mt-0.5">Mon - Sat: 9:00 AM - 8:00 PM IST</p>
+                  {settings.phone
+                    ? <a href={`tel:${settings.phone.replace(/[^\d+]/g, '')}`} className="text-xs text-olive font-medium hover:underline">{settings.phone}</a>
+                    : <span className="text-xs text-charcoal-500">Not provided</span>}
+                  {settings.businessHours && <p className="text-[11px] text-charcoal-400 mt-0.5">{settings.businessHours}</p>}
                 </div>
               </div>
 
@@ -112,9 +122,9 @@ export default function Contact() {
                 </div>
                 <div>
                   <h4 className="text-charcoal font-semibold text-sm">Email Address</h4>
-                  <a href={`mailto:${COMPANY_EMAIL}`} className="text-xs text-olive font-medium hover:underline">
-                    {COMPANY_EMAIL}
-                  </a>
+                  {settings.email
+                    ? <a href={`mailto:${settings.email}`} className="text-xs text-olive font-medium hover:underline">{settings.email}</a>
+                    : <span className="text-xs text-charcoal-500">Not provided</span>}
                 </div>
               </div>
 
@@ -124,9 +134,9 @@ export default function Contact() {
                 </div>
                 <div>
                   <h4 className="text-charcoal font-semibold text-sm">Factory & Showroom Address</h4>
-                  <p className="text-xs text-charcoal-600 leading-relaxed">
-                    {COMPANY_ADDRESS}
-                  </p>
+                  {settings.mapUrl && settings.address
+                    ? <a href={settings.mapUrl} target="_blank" rel="noreferrer" className="text-xs text-charcoal-600 leading-relaxed hover:text-olive">{settings.address}</a>
+                    : <p className="text-xs text-charcoal-600 leading-relaxed">{settings.address || 'Address not provided'}</p>}
                 </div>
               </div>
             </div>
@@ -134,7 +144,7 @@ export default function Contact() {
             <div className="bg-white p-4 rounded-3xl border border-sand-300 text-xs text-charcoal-600 shadow-2xs flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Clock className="w-4 h-4 text-olive" />
-                <span>Working Hours: Mon-Sat (9:00 AM - 8:00 PM)</span>
+                <span>{settings.businessHours ? `Working Hours: ${settings.businessHours}` : 'Working hours not provided'}</span>
               </div>
               <span className="text-olive font-bold">Tiruppur Hub</span>
             </div>
@@ -153,11 +163,12 @@ export default function Contact() {
               </div>
 
               {submitted && (
-                <div className="mb-6 p-4 rounded-2xl bg-sand-100 border border-sand-300 text-olive text-xs flex items-center gap-2 font-semibold">
+                <div role="status" className="mb-6 p-4 rounded-2xl bg-sand-100 border border-sand-300 text-olive text-xs flex items-center gap-2 font-semibold">
                   <CheckCircle2 className="w-5 h-5 text-olive shrink-0" />
-                  <span>Enquiry ticket registered! Opening WhatsApp...</span>
+                  <span>Enquiry saved. {whatsappUrl && <a className="underline" href={whatsappUrl} target="_blank" rel="noreferrer">Continue on WhatsApp</a>}</span>
                 </div>
               )}
+              {submitError && <p role="alert" className="mb-4 rounded-xl border border-rose-200 bg-rose-50 p-3 text-xs text-rose-800">{submitError}</p>}
 
               <form onSubmit={handleSubmit} className="space-y-4">
                 
@@ -167,6 +178,7 @@ export default function Contact() {
                     <input
                       type="text"
                       required
+                      maxLength={120}
                       placeholder="e.g. Ramesh Kumar"
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -179,6 +191,9 @@ export default function Contact() {
                     <input
                       type="tel"
                       required
+                      minLength={5}
+                      maxLength={40}
+                      pattern="[0-9+().\\s-]+"
                       placeholder="e.g. +91 9876543210"
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
@@ -192,6 +207,7 @@ export default function Contact() {
                     <label className="text-xs font-semibold text-charcoal-700">Email Address (Optional)</label>
                     <input
                       type="email"
+                      maxLength={254}
                       placeholder="e.g. name@example.com"
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -207,9 +223,8 @@ export default function Contact() {
                       className="w-full bg-sand-50/80 text-charcoal text-xs p-3 rounded-xl border border-sand-300 focus:outline-none focus:border-olive focus:bg-white"
                     >
                       <option value="retail">Single Piece / Retail Inquiry</option>
-                      <option value="bulk">Bulk Order / Corporate T-Shirts</option>
+                      <option value="wholesale">Bulk Order / Corporate T-Shirts</option>
                       <option value="custom">Custom Screen Printing / Labeling</option>
-                      <option value="partnership">Wholesale Distributorship</option>
                     </select>
                   </div>
                 </div>
@@ -219,6 +234,7 @@ export default function Contact() {
                   <input
                     type="number"
                     min="1"
+                    max="1000000"
                     value={formData.quantity}
                     onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
                     className="w-full bg-sand-50/80 text-charcoal text-xs p-3 rounded-xl border border-sand-300 focus:outline-none focus:border-olive focus:bg-white"
@@ -230,6 +246,7 @@ export default function Contact() {
                   <textarea
                     required
                     rows={4}
+                    maxLength={5000}
                     placeholder="Describe the garments, colors, sizes or custom printing needs..."
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
@@ -239,10 +256,11 @@ export default function Contact() {
 
                 <button
                   type="submit"
-                  className="w-full flex items-center justify-center gap-2 bg-olive hover:bg-olive-600 text-white font-bold text-xs py-3.5 rounded-xl shadow-lg shadow-olive/20 transition-all"
+                  disabled={submitting}
+                  className="w-full flex items-center justify-center gap-2 bg-olive enabled:hover:bg-olive-600 disabled:opacity-50 text-white font-bold text-xs py-3.5 rounded-xl shadow-lg shadow-olive/20 transition-all"
                 >
                   <Send className="w-4 h-4" />
-                  <span>Submit Ticket & Open WhatsApp</span>
+                  <span>{submitting ? 'Saving enquiry…' : 'Submit enquiry & open WhatsApp'}</span>
                 </button>
 
               </form>

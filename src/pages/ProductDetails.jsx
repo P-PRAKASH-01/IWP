@@ -4,7 +4,6 @@ import {
   Star, 
   MessageSquare, 
   Phone, 
-  ShieldCheck, 
   ArrowLeft, 
   CheckCircle2, 
   Minus, 
@@ -20,27 +19,57 @@ import { productService } from '../services/productService';
 import { buildWhatsAppUrl, CONTACT_PHONE_DISPLAY } from '../utils/whatsapp';
 import { useWishlist } from '../context/WishlistContext';
 import ProductCard from '../components/products/ProductCard';
+import { useStore } from '../context/StoreContext';
 
 export default function ProductDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [product, setProduct] = useState(null);
   const [allProducts, setAllProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState('');
+  const [activeImage, setActiveImage] = useState('');
+  const [selectedSize, setSelectedSize] = useState('M');
+  const [selectedColor, setSelectedColor] = useState('');
+  const [quantity, setQuantity] = useState(1);
+  const [customNotes, setCustomNotes] = useState('');
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+  const [showSizeCalculator, setShowSizeCalculator] = useState(false);
+  const [chestInput, setChestInput] = useState('');
+  const [calculatedSize, setCalculatedSize] = useState('');
 
   const { toggleWishlist, isInWishlist, showToast } = useWishlist();
+  const { settings } = useStore();
 
   useEffect(() => {
-    const fetched = productService.getProductById(id);
-    setProduct(fetched);
-    setAllProducts(productService.getAllProducts());
+    let active = true;
+    setLoading(true);
+    setLoadError('');
+    Promise.all([productService.getProductById(id), productService.getAllProducts()])
+      .then(([fetched, products]) => {
+        if (!active) return;
+        setProduct(fetched);
+        setAllProducts(products);
+        setActiveImage(fetched?.images?.[0] || '');
+        setSelectedSize(fetched?.sizes?.[0] || 'M');
+        setSelectedColor(fetched?.colors?.[0]?.name || '');
+        setQuantity(fetched?.minBulkQty || 1);
+      })
+      .catch((error) => {
+        if (active) setLoadError(error.message || 'Product information could not be loaded.');
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+    return () => { active = false; };
   }, [id]);
 
-  if (!product) {
+  if (loading || !product) {
     return (
       <div className="min-h-screen bg-ivory pt-32 pb-20 flex items-center justify-center">
         <div className="text-center p-8 bg-white border border-sand-300 rounded-3xl max-w-md shadow-xl">
-          <h2 className="text-2xl font-bold text-charcoal mb-2">Garment Not Found</h2>
-          <p className="text-charcoal-500 text-xs mb-4">The product ID "{id}" does not exist in our current catalogue.</p>
+          <h2 className="text-2xl font-bold text-charcoal mb-2">{loading ? 'Loading product…' : 'Garment Not Found'}</h2>
+          <p className="text-charcoal-500 text-xs mb-4">{loadError || (loading ? 'Please wait while we load this product.' : `The product ID "${id}" does not exist in our current catalogue.`)}</p>
           <button
             onClick={() => navigate('/products')}
             className="bg-olive hover:bg-olive-600 text-white text-xs font-semibold px-4 py-2.5 rounded-xl shadow-md shadow-olive/20"
@@ -52,20 +81,6 @@ export default function ProductDetails() {
     );
   }
 
-  const [activeImage, setActiveImage] = useState(product.images?.[0] || '');
-  const [selectedSize, setSelectedSize] = useState(product.sizes?.[0] || 'M');
-  const [selectedColor, setSelectedColor] = useState(product.colors?.[0]?.name || 'Default');
-  const [quantity, setQuantity] = useState(product.minBulkQty || 1);
-  const [customNotes, setCustomNotes] = useState('');
-  
-  // Modals state
-  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
-  const [showSizeCalculator, setShowSizeCalculator] = useState(false);
-
-  // Size calculator state
-  const [chestInput, setChestInput] = useState('');
-  const [calculatedSize, setCalculatedSize] = useState('');
-
   const isSaved = isInWishlist(product.id);
 
   const whatsappUrl = buildWhatsAppUrl({
@@ -73,7 +88,9 @@ export default function ProductDetails() {
     selectedSize,
     selectedColor,
     quantity,
-    message: customNotes
+    message: customNotes,
+    phoneNumber: settings.whatsapp,
+    businessName: settings.businessName
   });
 
   const handleCalculateSize = (e) => {
@@ -191,12 +208,14 @@ export default function ProductDetails() {
           <div className="lg:col-span-6 space-y-6">
             <div>
               <div className="flex items-center gap-2 text-xs font-semibold text-olive mb-1">
-                <span>Garment Code: {product.id}</span>
-                <span>•</span>
-                <span className="flex items-center gap-1 text-amber-500">
-                  <Star className="w-3.5 h-3.5 fill-amber-500" />
-                  {product.rating} ({product.reviewsCount} reviews)
-                </span>
+                <span>Garment Code: {product.productCode || product.id}</span>
+                {product.rating > 0 && <>
+                  <span>•</span>
+                  <span className="flex items-center gap-1 text-amber-500">
+                    <Star className="w-3.5 h-3.5 fill-amber-500" />
+                    {product.rating} ({product.reviewsCount} reviews)
+                  </span>
+                </>}
               </div>
 
               <h1 className="text-2xl sm:text-3xl font-extrabold text-charcoal tracking-tight">
@@ -213,7 +232,7 @@ export default function ProductDetails() {
               <div>
                 <span className="text-xs text-charcoal-400 block font-medium">Unit Price</span>
                 <div className="flex items-baseline gap-2">
-                  <span className="text-3xl font-black text-charcoal">₹{product.price}</span>
+                  <span className="text-3xl font-black text-charcoal">{product.price == null ? 'Ask for price' : `₹${product.price}`}</span>
                   {product.originalPrice && (
                     <span className="text-sm text-charcoal-400 line-through">₹{product.originalPrice}</span>
                   )}
@@ -354,7 +373,7 @@ export default function ProductDetails() {
             {/* Action Buttons */}
             <div className="pt-2 space-y-3 hidden sm:block">
               <a
-                href={whatsappUrl}
+                href={whatsappUrl || '/contact'}
                 target="_blank"
                 rel="noreferrer"
                 className="w-full flex items-center justify-center gap-2 bg-olive hover:bg-olive-600 text-white font-bold text-sm py-4 rounded-2xl shadow-lg shadow-olive/20 transition-all"
@@ -364,11 +383,11 @@ export default function ProductDetails() {
               </a>
 
               <a
-                href={`tel:${CONTACT_PHONE_DISPLAY}`}
+                href={`tel:${settings.phone || CONTACT_PHONE_DISPLAY}`}
                 className="w-full flex items-center justify-center gap-2 bg-white hover:bg-sand-50 text-charcoal border border-sand-300 font-semibold text-xs py-3 rounded-2xl transition-all shadow-2xs"
               >
                 <Phone className="w-4 h-4 text-olive" />
-                <span>Call Shop Directly ({CONTACT_PHONE_DISPLAY})</span>
+                <span>{settings.phone ? `Call Shop Directly (${settings.phone})` : 'Phone number not provided'}</span>
               </a>
             </div>
 

@@ -1,24 +1,26 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { X, Heart, Trash2, MessageSquare, ArrowRight, ShoppingBag } from 'lucide-react';
+import { X, Heart, Trash2, MessageSquare, ArrowRight } from 'lucide-react';
 import { useWishlist } from '../../context/WishlistContext';
 import { buildWhatsAppUrl } from '../../utils/whatsapp';
+import { useStore } from '../../context/StoreContext';
 
 export default function WishlistDrawer() {
   const { wishlist, toggleWishlist, clearWishlist, isWishlistOpen, setIsWishlistOpen } = useWishlist();
+  const { settings } = useStore();
 
   if (!isWishlistOpen) return null;
 
   // Build batch whatsapp url for all saved items
   const handleBatchEnquire = () => {
-    let msg = `Hello Sri Sai Garments! I would like to enquire about my saved garments:\n\n`;
+    let msg = `I would like to enquire about my saved garments:\n\n`;
     wishlist.forEach((item, i) => {
-      msg += `${i + 1}. *${item.name}* (Code: ${item.id}) - ₹${item.price}\n`;
+      msg += `${i + 1}. *${item.name}* (Code: ${item.productCode || item.id})${item.price == null ? '' : ` - ₹${item.price}`}\n`;
     });
     msg += `\nPlease inform me about total pricing, availability, and delivery time. Thank you!`;
 
-    const encoded = encodeURIComponent(msg);
-    window.open(`https://wa.me/919876543210?text=${encoded}`, '_blank');
+    const url = buildWhatsAppUrl({ message: msg, phoneNumber: settings.whatsapp, businessName: settings.businessName });
+    if (url) window.open(url, '_blank', 'noopener,noreferrer');
   };
 
   return (
@@ -68,8 +70,8 @@ export default function WishlistDrawer() {
                 className="flex items-center gap-4 p-3 rounded-2xl bg-sand-50/70 border border-sand-200 relative group"
               >
                 <img
-                  src={item.images[0]}
-                  alt={item.name}
+                  src={item.images?.[0] || ''}
+                  alt={item.imageAlt || item.name}
                   className="w-16 h-16 object-cover rounded-xl border border-sand-200 shrink-0"
                 />
                 
@@ -84,12 +86,12 @@ export default function WishlistDrawer() {
                   >
                     {item.name}
                   </Link>
-                  <div className="text-xs font-bold text-charcoal mt-1">₹{item.price}</div>
+                  <div className="text-xs font-bold text-charcoal mt-1">{item.price == null ? 'Ask for price' : `₹${item.price}`}</div>
                 </div>
 
                 <div className="flex items-center gap-2">
                   <a
-                    href={buildWhatsAppUrl({ product: item })}
+                    href={buildWhatsAppUrl({ product: item, phoneNumber: settings.whatsapp, businessName: settings.businessName }) || '/contact'}
                     target="_blank"
                     rel="noreferrer"
                     className="p-2 rounded-xl bg-sand-100 hover:bg-olive text-olive hover:text-white border border-sand-300 transition-colors"

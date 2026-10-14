@@ -1,9 +1,22 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Layers } from 'lucide-react';
-import { categories } from '../../data/categories';
+import { storeService } from '../../services/storeService';
 
 export default function CategorySection() {
+  const [categories, setCategories] = useState([]);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let active = true;
+    storeService.getCategories()
+      .then((rows) => { if (active) setCategories(rows.filter((category) => category.isActive)); })
+      .catch((loadError) => { if (active) setError(loadError.message || 'Categories could not be loaded.'); })
+      .finally(() => { if (active) setLoading(false); });
+    return () => { active = false; };
+  }, []);
+
   return (
     <section className="py-20 bg-ivory relative border-t border-sand-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -27,8 +40,8 @@ export default function CategorySection() {
           </Link>
         </div>
 
-        {/* Categories Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {error && <p role="alert" className="mb-5 rounded-xl border border-rose-200 bg-rose-50 p-3 text-sm text-rose-800">{error}</p>}
+        {loading ? <p role="status" className="py-8 text-center text-sm text-charcoal-600">Loading categories…</p> : categories.length === 0 && !error ? <p className="rounded-2xl border border-sand-300 bg-white p-8 text-center text-sm text-charcoal-600">No public categories are available yet.</p> : <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {categories.map((cat, idx) => (
             <Link
               key={cat.id}
@@ -39,11 +52,11 @@ export default function CategorySection() {
             >
               {/* Category Image */}
               <div className="aspect-[16/10] overflow-hidden bg-sand-100 relative">
-                <img
+                {cat.image && <img
                   src={cat.image}
                   alt={cat.name}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
+                />}
                 <div className="absolute inset-0 bg-gradient-to-t from-charcoal/80 via-charcoal/20 to-transparent" />
                 
                 {/* Badge */}
@@ -61,7 +74,7 @@ export default function CategorySection() {
                     {cat.name}
                   </h3>
                   <span className="text-xs font-semibold bg-sand-100 text-charcoal-700 px-2.5 py-1 rounded-full border border-sand-200">
-                    {cat.itemCount} items
+                    {cat.productCount} items
                   </span>
                 </div>
                 <p className="text-xs text-charcoal-500 mt-2 line-clamp-2 leading-relaxed">
@@ -75,7 +88,7 @@ export default function CategorySection() {
               </div>
             </Link>
           ))}
-        </div>
+        </div>}
 
       </div>
     </section>

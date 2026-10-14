@@ -6,13 +6,22 @@ export const COMPANY_ADDRESS = "14/A Textile City Main Road, Near New Bus Stand,
 /**
  * Builds a WhatsApp URL with pre-filled enquiry message
  */
-export function buildWhatsAppUrl({ product, selectedSize, selectedColor, quantity = 1, message = "" }) {
-  let text = `Hello *Sri Sai Garments*! 👋\n\n`;
+export function buildWhatsAppUrl({
+  product,
+  selectedSize,
+  selectedColor,
+  quantity = 1,
+  message = "",
+  phoneNumber = WHATSAPP_PHONE_NUMBER,
+  businessName = 'Sri Sai Garments'
+}) {
+  let text = `Hello *${businessName}*! 👋\n\n`;
 
   if (product) {
     text += `I would like to enquire about the following product:\n`;
-    text += `📦 *Product:* ${product.name} (Code: ${product.id})\n`;
-    text += `💰 *Price:* ₹${product.price}\n`;
+    text += `📦 *Product:* ${product.name} (Code: ${product.productCode || product.id})\n`;
+    if (product.price != null) text += `💰 *Price:* ₹${product.price}\n`;
+    else text += '*Please share the current price for this item.*\n';
     if (selectedSize) text += `📏 *Size:* ${selectedSize}\n`;
     if (selectedColor) text += `🎨 *Color:* ${selectedColor}\n`;
     text += `🔢 *Quantity:* ${quantity} ${quantity > 10 ? 'Pcs (Bulk Inquiry)' : 'Pcs'}\n\n`;
@@ -25,5 +34,6 @@ export function buildWhatsAppUrl({ product, selectedSize, selectedColor, quantit
   text += `Could you please confirm availability, bulk pricing, and delivery details?\nThank you!`;
 
   const encodedText = encodeURIComponent(text);
-  return `https://wa.me/${WHATSAPP_PHONE_NUMBER}?text=${encodedText}`;
+  const digits = String(phoneNumber ?? WHATSAPP_PHONE_NUMBER).replace(/\D/g, '');
+  return digits ? `https://wa.me/${digits}?text=${encodedText}` : '';
 }

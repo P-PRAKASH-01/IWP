@@ -7,9 +7,16 @@ export default function FeaturedProducts() {
   const [productsList, setProductsList] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('featured');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    setProductsList(productService.getAllProducts());
+    let active = true;
+    productService.getAllProducts()
+      .then((products) => { if (active) setProductsList(products); })
+      .catch((loadError) => { if (active) setError(loadError.message || 'The catalogue could not be loaded.'); })
+      .finally(() => { if (active) setLoading(false); });
+    return () => { active = false; };
   }, []);
 
   let displayProducts = productsList.filter((p) => {
@@ -23,11 +30,13 @@ export default function FeaturedProducts() {
   });
 
   if (sortBy === 'price-low') {
-    displayProducts.sort((a, b) => a.price - b.price);
+    displayProducts.sort((a, b) => (a.price ?? Number.MAX_SAFE_INTEGER) - (b.price ?? Number.MAX_SAFE_INTEGER));
   } else if (sortBy === 'price-high') {
-    displayProducts.sort((a, b) => b.price - a.price);
+    displayProducts.sort((a, b) => (b.price ?? 0) - (a.price ?? 0));
   } else if (sortBy === 'rating') {
     displayProducts.sort((a, b) => b.rating - a.rating);
+  } else {
+    displayProducts.sort((a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured)));
   }
 
   return (
@@ -44,7 +53,7 @@ export default function FeaturedProducts() {
               Explore Our All Garments Catalogue
             </h2>
             <p className="text-charcoal-500 text-xs sm:text-sm mt-1">
-              Displaying all {displayProducts.length} available dresses & garment designs
+              {loading ? 'Loading published products…' : `Displaying ${displayProducts.length} published products`}
             </p>
           </div>
 
@@ -78,11 +87,14 @@ export default function FeaturedProducts() {
         </div>
 
         {/* Product Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {error && <p role="alert" className="mb-5 rounded-xl border border-rose-200 bg-rose-50 p-3 text-sm text-rose-800">{error}</p>}
+        {loading ? <p role="status" className="py-12 text-center text-sm text-charcoal-600">Loading catalogue…</p> : displayProducts.length === 0 ? (
+          <p className="rounded-2xl border border-sand-300 bg-white py-12 text-center text-sm text-charcoal-600">No published products are available yet.</p>
+        ) : <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {displayProducts.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
-        </div>
+        </div>}
 
       </div>
     </section>

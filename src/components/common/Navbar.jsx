@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Search, Menu, X, Heart, MessageSquare } from 'lucide-react';
 import { useWishlist } from '../../context/WishlistContext';
-import { WHATSAPP_PHONE_NUMBER } from '../../utils/whatsapp';
+import { useStore } from '../../context/StoreContext';
 
 export default function Navbar({ onSearchOpen }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { wishlist, setIsWishlistOpen } = useWishlist();
+  const { settings } = useStore();
   const location = useLocation();
 
   useEffect(() => {
@@ -35,14 +36,14 @@ export default function Navbar({ onSearchOpen }) {
           <Link to="/" className="flex items-center gap-3 group">
             <div className="w-10 h-10 rounded-xl bg-charcoal p-0.5 shadow-md shadow-charcoal/10 group-hover:scale-105 transition-transform duration-300 flex items-center justify-center">
               <div className="w-full h-full bg-olive rounded-[10px] flex items-center justify-center">
-                <span className="font-black text-ivory text-base tracking-wider">
-                  SSG
-                </span>
+                {settings.logo
+                  ? <img src={settings.logo} alt="" className="w-full h-full rounded-[10px] object-contain" />
+                  : <span className="font-black text-ivory text-base tracking-wider">SSG</span>}
               </div>
             </div>
             <div>
               <span className="text-lg sm:text-xl font-bold tracking-tight text-charcoal group-hover:text-olive transition-colors block leading-none">
-                SRI SAI <span className="text-olive font-extrabold">GARMENTS</span>
+                {settings.businessName}
               </span>
               <span className="text-[10px] uppercase tracking-widest text-charcoal-500 font-medium block mt-1">
                 Tiruppur • Direct Virtual Shop
@@ -129,7 +130,7 @@ export default function Navbar({ onSearchOpen }) {
 
             {/* WhatsApp Direct CTA */}
             <a
-              href={`https://wa.me/${WHATSAPP_PHONE_NUMBER}?text=${encodeURIComponent('Hello Sri Sai Garments! I would like to inquire about your garments catalogue.')}`}
+              href={settings.whatsapp ? `https://wa.me/${String(settings.whatsapp).replace(/\D/g, '')}?text=${encodeURIComponent(`Hello ${settings.businessName}! I would like to inquire about your garments catalogue.`)}` : '/contact'}
               target="_blank"
               rel="noreferrer"
               className="hidden sm:inline-flex items-center gap-2 bg-olive hover:bg-olive-600 text-white text-xs font-semibold px-4 py-2.5 rounded-xl shadow-md shadow-olive/20 transition-all active:scale-95"
@@ -189,7 +190,7 @@ export default function Navbar({ onSearchOpen }) {
 
             <div className="pt-2 px-1">
               <a
-                href={`https://wa.me/${WHATSAPP_PHONE_NUMBER}?text=${encodeURIComponent('Hello Sri Sai Garments! I would like to inquire about your garments catalogue.')}`}
+                href={settings.whatsapp ? `https://wa.me/${String(settings.whatsapp).replace(/\D/g, '')}?text=${encodeURIComponent(`Hello ${settings.businessName}! I would like to inquire about your garments catalogue.`)}` : '/contact'}
                 target="_blank"
                 rel="noreferrer"
                 className="w-full flex items-center justify-center gap-2 bg-olive hover:bg-olive-600 text-white font-semibold text-xs py-3 rounded-xl shadow-md shadow-olive/20"

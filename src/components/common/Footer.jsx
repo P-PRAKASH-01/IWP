@@ -1,9 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Phone, Mail, MapPin, MessageSquare, ShieldCheck, Truck, Factory, Sparkles } from 'lucide-react';
-import { WHATSAPP_PHONE_NUMBER, CONTACT_PHONE_DISPLAY, COMPANY_EMAIL, COMPANY_ADDRESS } from '../../utils/whatsapp';
+import { CONTACT_PHONE_DISPLAY, COMPANY_EMAIL, COMPANY_ADDRESS } from '../../utils/whatsapp';
+import { useStore } from '../../context/StoreContext';
 
 export default function Footer() {
+  const { settings, settingsConfigured } = useStore();
+  const phone = settingsConfigured ? settings.phone : settings.phone || CONTACT_PHONE_DISPLAY;
+  const email = settingsConfigured ? settings.email : settings.email || COMPANY_EMAIL;
+  const address = settingsConfigured ? settings.address : settings.address || COMPANY_ADDRESS;
   return (
     <footer className="bg-charcoal border-t border-charcoal-700 pt-16 pb-8 text-sand-300 text-sm mt-auto relative overflow-hidden">
       {/* Background Accent Subtle Glow */}
@@ -61,22 +66,22 @@ export default function Footer() {
           <div className="lg:col-span-2 space-y-4">
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-xl bg-olive p-0.5 flex items-center justify-center">
-                <span className="font-black text-ivory text-sm">
-                  SSG
-                </span>
+                {settings.logo
+                  ? <img src={settings.logo} alt="" className="w-full h-full rounded-lg object-contain" />
+                  : <span className="font-black text-ivory text-sm">SSG</span>}
               </div>
               <span className="text-lg font-bold text-ivory tracking-tight">
-                SRI SAI <span className="text-olive">GARMENTS</span>
+                {settings.businessName}
               </span>
             </div>
 
             <p className="text-xs text-sand-300 leading-relaxed max-w-sm">
-              Sri Sai Garments is a trusted garment showcase and direct enquiry hub based out of Tiruppur, Tamil Nadu — the textile capital of India. Specializing in premium knitted cotton t-shirts, shirts, loungewear, and custom bulk manufacturing.
+              {settings.about || 'Sri Sai Garments'}
             </p>
 
             <div className="pt-2">
               <a
-                href={`https://wa.me/${WHATSAPP_PHONE_NUMBER}`}
+                href={settings.whatsapp ? `https://wa.me/${String(settings.whatsapp).replace(/\D/g, '')}` : '/contact'}
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex items-center gap-2 bg-olive/20 hover:bg-olive/30 text-sand-100 border border-olive/40 px-4 py-2 rounded-xl text-xs font-semibold transition-all"
@@ -121,30 +126,33 @@ export default function Footer() {
               Get in Touch
             </h4>
             <ul className="space-y-3 text-xs">
-              <li className="flex items-start gap-2.5">
+              {address && <li className="flex items-start gap-2.5">
                 <MapPin className="w-4 h-4 text-olive shrink-0 mt-0.5" />
-                <span className="text-sand-200">{COMPANY_ADDRESS}</span>
-              </li>
+                {address && <span className="text-sand-200">{address}</span>}
+              </li>}
               <li className="flex items-center gap-2.5">
                 <Phone className="w-4 h-4 text-olive shrink-0" />
-                <a href={`tel:${CONTACT_PHONE_DISPLAY}`} className="text-sand-200 hover:text-olive transition-colors">
-                  {CONTACT_PHONE_DISPLAY}
-                </a>
+                {phone && <a href={`tel:${phone}`} className="text-sand-200 hover:text-olive transition-colors">{phone}</a>}
               </li>
               <li className="flex items-center gap-2.5">
                 <Mail className="w-4 h-4 text-olive shrink-0" />
-                <a href={`mailto:${COMPANY_EMAIL}`} className="text-sand-200 hover:text-olive transition-colors">
-                  {COMPANY_EMAIL}
-                </a>
+                {email && <a href={`mailto:${email}`} className="text-sand-200 hover:text-olive transition-colors">{email}</a>}
               </li>
             </ul>
+            {Object.entries(settings.socialLinks || {}).filter(([, url]) => url).length > 0 && (
+              <div className="mt-4 flex flex-wrap gap-3">
+                {Object.entries(settings.socialLinks).filter(([, url]) => url).map(([network, url]) => (
+                  <a key={network} href={url} target="_blank" rel="noreferrer" className="text-xs capitalize text-sand-200 hover:text-olive">{network}</a>
+                ))}
+              </div>
+            )}
           </div>
 
         </div>
 
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-charcoal-700 flex flex-col sm:flex-row items-center justify-between text-xs text-sand-400 gap-4">
-          <p>© {new Date().getFullYear()} Sri Sai Garments. All rights reserved. Tiruppur, Tamil Nadu.</p>
+          <p>© {new Date().getFullYear()} {settings.businessName}. {settings.footer || 'All rights reserved.'}</p>
           <div className="flex items-center gap-6">
             <span>Product Showcase & Enquiry Platform</span>
             <span>•</span>

@@ -1,9 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, MessageSquare, ShieldCheck, Factory, Sparkles, CheckCircle2 } from 'lucide-react';
-import { WHATSAPP_PHONE_NUMBER } from '../../utils/whatsapp';
+import { ArrowRight, MessageSquare, ShieldCheck, Sparkles, CheckCircle2 } from 'lucide-react';
+import { useStore } from '../../context/StoreContext';
 
 export default function Hero() {
+  const { settings } = useStore();
   return (
     <div className="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden bg-ivory">
       
@@ -61,7 +62,7 @@ export default function Hero() {
               </Link>
 
               <a
-                href={`https://wa.me/${WHATSAPP_PHONE_NUMBER}?text=${encodeURIComponent('Hello Sri Sai Garments! I would like to inquire about bulk ordering and custom t-shirt manufacturing.')}`}
+                href={settings.whatsapp ? `https://wa.me/${String(settings.whatsapp).replace(/\D/g, '')}?text=${encodeURIComponent(`Hello ${settings.businessName}! I would like to inquire about bulk ordering and custom garment manufacturing.`)}` : '/contact'}
                 target="_blank"
                 rel="noreferrer"
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white hover:bg-sand-50 text-charcoal border border-sand-300 font-semibold text-sm px-6 py-4 rounded-2xl shadow-xs transition-all hover:scale-[1.02]"

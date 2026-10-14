@@ -1,20 +1,24 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ShoppingBag, Heart, Eye } from 'lucide-react';
+import { ShoppingBag, Heart } from 'lucide-react';
 import { buildWhatsAppUrl } from '../../utils/whatsapp';
 import { useWishlist } from '../../context/WishlistContext';
+import { useStore } from '../../context/StoreContext';
 
 export default function ProductCard({ product }) {
   const [selectedSize] = useState(product.sizes?.[0] || 'L');
   const [selectedColor] = useState(product.colors?.[0]?.name || '');
   const { toggleWishlist, isInWishlist } = useWishlist();
+  const { settings } = useStore();
 
   const isSaved = isInWishlist(product.id);
 
   const whatsappUrl = buildWhatsAppUrl({
     product,
     selectedSize,
-    selectedColor
+    selectedColor,
+    phoneNumber: settings.whatsapp,
+    businessName: settings.businessName
   });
 
   return (
@@ -42,8 +46,8 @@ export default function ProductCard({ product }) {
         {/* Product Image */}
         <Link to={`/products/${product.id}`} className="w-full h-full flex items-center justify-center">
           <img
-            src={product.images[0]}
-            alt={product.name}
+            src={product.images?.[0] || ''}
+            alt={product.imageAlt || product.name}
             className="w-full h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-500 ease-out"
           />
         </Link>
@@ -60,7 +64,7 @@ export default function ProductCard({ product }) {
               </h3>
             </Link>
             <span className="text-charcoal font-bold text-sm sm:text-base shrink-0">
-              ₹{product.price}
+              {product.price == null ? 'Ask for price' : `₹${product.price}`}
             </span>
           </div>
 
@@ -72,7 +76,7 @@ export default function ProductCard({ product }) {
 
         {/* Full-width Add to Cart / Enquire Button */}
         <a
-          href={whatsappUrl}
+          href={whatsappUrl || '/contact'}
           target="_blank"
           rel="noreferrer"
           className="mt-4 w-full py-2.5 px-4 rounded-xl bg-sand-200/70 hover:bg-olive text-charcoal-800 hover:text-white font-semibold text-xs flex items-center justify-center gap-2 border border-sand-300 hover:border-olive transition-all duration-200 shadow-xs"

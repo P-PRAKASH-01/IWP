@@ -1,102 +1,106 @@
-import React from 'react';
-import { Link, useLocation, useNavigate, Navigate } from 'react-router-dom';
-import { LayoutDashboard, Package, MessageSquare, LogOut, Store, ShieldAlert, Sparkles } from 'lucide-react';
+import React, { useState } from 'react';
+import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
+import {
+  LayoutDashboard, LogOut, Menu, MessageSquare, Package, Settings, Store, Tags, X, PanelsTopLeft
+} from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
+const navItems = [
+  { label: 'Dashboard', path: '/admin/dashboard', icon: LayoutDashboard },
+  { label: 'Products', path: '/admin/products', icon: Package },
+  { label: 'Categories', path: '/admin/categories', icon: Tags },
+  { label: 'Enquiries', path: '/admin/enquiries', icon: MessageSquare },
+  { label: 'Homepage content', path: '/admin/content', icon: PanelsTopLeft },
+  { label: 'Store settings', path: '/admin/settings', icon: Settings }
+];
+
 export default function AdminLayout({ children }) {
-  const { isAdminLoggedIn, logout } = useAuth();
+  const { isAdminLoggedIn, isLoading, logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [logoutError, setLogoutError] = useState('');
 
-  if (!isAdminLoggedIn) {
-    return <Navigate to="/admin/login" replace />;
+  if (isLoading) {
+    return <main className="min-h-screen bg-ivory grid place-items-center text-sm text-charcoal-600">Checking administrator access…</main>;
   }
+  if (!isAdminLoggedIn) return <Navigate to="/admin/login" replace state={{ from: location.pathname }} />;
 
-  const handleLogout = () => {
-    logout();
-    navigate('/admin/login');
+  const handleLogout = async () => {
+    setLogoutError('');
+    try {
+      await logout();
+      navigate('/admin/login', { replace: true });
+    } catch (error) {
+      setLogoutError(error.message || 'Unable to sign out. Please try again.');
+    }
   };
 
-  const navItems = [
-    { label: 'Dashboard Overview', path: '/admin', icon: LayoutDashboard },
-    { label: 'Garment CRUD Manager', path: '/admin/products', icon: Package },
-    { label: 'Enquiry Tickets', path: '/admin/enquiries', icon: MessageSquare }
-  ];
+  const navigation = (
+    <>
+      <p className="px-3 py-2 text-[10px] uppercase tracking-wider text-charcoal-500 font-bold">Store management</p>
+      {navItems.map((item) => {
+        const Icon = item.icon;
+        const active = location.pathname === item.path
+          || (item.path === '/admin/products' && location.pathname.startsWith('/admin/products/'));
+        return (
+          <Link
+            key={item.path}
+            to={item.path}
+            onClick={() => setMenuOpen(false)}
+            aria-current={active ? 'page' : undefined}
+            className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-olive ${
+              active ? 'bg-olive text-white' : 'text-charcoal-700 hover:bg-sand-100'
+            }`}
+          >
+            <Icon className="w-4 h-4" aria-hidden="true" />
+            <span>{item.label}</span>
+          </Link>
+        );
+      })}
+    </>
+  );
 
   return (
-    <div className="min-h-screen bg-ivory flex flex-col font-sans text-charcoal">
-      
-      {/* Top Admin Header */}
-      <header className="bg-white border-b border-sand-300 sticky top-0 z-40 px-4 sm:px-6 py-3 flex items-center justify-between shadow-2xs">
+    <div className="min-h-screen bg-ivory flex flex-col text-charcoal">
+      <header className="bg-white border-b border-sand-300 sticky top-0 z-40 px-4 sm:px-6 py-3 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-olive p-0.5 flex items-center justify-center">
-            <span className="text-white font-extrabold text-xs">
-              SSG
-            </span>
-          </div>
+          <button
+            type="button"
+            className="md:hidden p-2 rounded-lg hover:bg-sand-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-olive"
+            onClick={() => setMenuOpen((open) => !open)}
+            aria-label={menuOpen ? 'Close admin navigation' : 'Open admin navigation'}
+            aria-expanded={menuOpen}
+          >
+            {menuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
+          <div className="w-9 h-9 rounded-lg bg-olive flex items-center justify-center text-white font-extrabold text-xs">SSG</div>
           <div>
-            <span className="text-charcoal font-bold text-sm block leading-none">
-              SRI SAI GARMENTS <span className="text-olive font-extrabold text-xs">ADMIN</span>
-            </span>
-            <span className="text-[10px] text-charcoal-400 font-mono">Control Panel</span>
+            <span className="text-charcoal font-bold text-sm block leading-none">SRI SAI GARMENTS <span className="text-olive">ADMIN</span></span>
+            <span className="text-[10px] text-charcoal-500">Store control panel</span>
           </div>
         </div>
-
-        <div className="flex items-center gap-4">
-          <Link
-            to="/"
-            target="_blank"
-            className="hidden sm:inline-flex items-center gap-1.5 text-xs text-charcoal-700 hover:text-olive bg-sand-50 px-3 py-1.5 rounded-lg border border-sand-200 transition-colors"
-          >
-            <Store className="w-3.5 h-3.5 text-olive" />
-            <span>View Live Shop</span>
+        <div className="flex items-center gap-2">
+          <Link to="/" target="_blank" rel="noreferrer" className="hidden sm:inline-flex items-center gap-1.5 text-xs text-charcoal-700 hover:text-olive px-3 py-2 rounded-lg border border-sand-200">
+            <Store className="w-3.5 h-3.5" aria-hidden="true" /> View shop
           </Link>
-
-          <button
-            onClick={handleLogout}
-            className="flex items-center gap-1.5 text-xs text-charcoal-700 hover:text-rose-600 bg-sand-50 hover:bg-rose-50 px-3 py-1.5 rounded-lg border border-sand-200 transition-colors font-medium"
-          >
-            <LogOut className="w-3.5 h-3.5" />
-            <span>Logout</span>
+          <button type="button" onClick={handleLogout} className="inline-flex items-center gap-1.5 text-xs font-semibold text-charcoal-700 hover:text-rose-700 px-3 py-2 rounded-lg border border-sand-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-olive">
+            <LogOut className="w-3.5 h-3.5" aria-hidden="true" /> Sign out
           </button>
         </div>
       </header>
 
-      {/* Main Admin Sidebar + Content Body */}
+      {logoutError && <p role="alert" className="px-4 py-2 bg-rose-50 text-rose-800 text-sm">{logoutError}</p>}
       <div className="flex-1 flex flex-col md:flex-row">
-        
-        {/* Sidebar Navigation */}
-        <aside className="w-full md:w-64 bg-white/70 border-r border-sand-300 p-4 space-y-2 shrink-0">
-          <div className="px-3 py-2 text-[10px] uppercase tracking-wider text-charcoal-400 font-bold">
-            Admin Navigation
-          </div>
-
-          {navItems.map((item) => {
-            const Icon = item.icon;
-            const active = location.pathname === item.path;
-
-            return (
-              <Link
-                key={item.path}
-                to={item.path}
-                className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
-                  active
-                    ? 'bg-olive text-white shadow-md shadow-olive/20'
-                    : 'text-charcoal-600 hover:bg-sand-100 hover:text-charcoal'
-                }`}
-              >
-                <Icon className="w-4 h-4" />
-                <span>{item.label}</span>
-              </Link>
-            );
-          })}
+        <aside className="hidden md:block w-60 bg-white/80 border-r border-sand-300 p-4 space-y-1 shrink-0" aria-label="Admin navigation">
+          {navigation}
         </aside>
-
-        {/* Dynamic Admin View */}
-        <main className="flex-1 p-4 sm:p-6 lg:p-8 bg-ivory overflow-y-auto">
-          {children}
-        </main>
-
+        {menuOpen && (
+          <nav className="md:hidden bg-white border-b border-sand-300 p-4 space-y-1" aria-label="Admin navigation">
+            {navigation}
+          </nav>
+        )}
+        <main className="flex-1 p-4 sm:p-6 lg:p-8 min-w-0">{children}</main>
       </div>
     </div>
   );
