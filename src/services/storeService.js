@@ -1,5 +1,5 @@
 import { categories as localCategories } from '../data/categories';
-import { products } from '../data/products';
+import { productService } from './productService';
 import { requireSupabase, supabase } from './supabase';
 
 const SETTINGS_KEY = 'ssg_store_settings';
@@ -44,11 +44,12 @@ function toDatabaseCategory(category) {
 export const storeService = {
   async getCategories() {
     if (!supabase) {
+      const products = await productService.getAllProducts();
       return localCategories.map((category) => ({
         ...category,
         parentId: null,
         isActive: true,
-        productCount: products.filter((product) => product.category === category.slug).length
+        productCount: products.filter((product) => product.categoryId === category.id || product.category === category.slug).length
       }));
     }
     const { data, error } = await requireSupabase()

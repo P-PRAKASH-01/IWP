@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { Search, Menu, X, Heart, MessageSquare } from 'lucide-react';
 import { useWishlist } from '../../context/WishlistContext';
 import { useStore } from '../../context/StoreContext';
+import defaultLogo from '../../assets/Logos/Logo.jpeg';
 
 export default function Navbar({ onSearchOpen }) {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -36,9 +37,7 @@ export default function Navbar({ onSearchOpen }) {
           <Link to="/" className="flex items-center gap-3 group">
             <div className="w-10 h-10 rounded-xl bg-charcoal p-0.5 shadow-md shadow-charcoal/10 group-hover:scale-105 transition-transform duration-300 flex items-center justify-center">
               <div className="w-full h-full bg-olive rounded-[10px] flex items-center justify-center">
-                {settings.logo
-                  ? <img src={settings.logo} alt="" className="w-full h-full rounded-[10px] object-contain" />
-                  : <span className="font-black text-ivory text-base tracking-wider">SSG</span>}
+                <img src={settings.logo || defaultLogo} alt="" className="w-full h-full rounded-[10px] object-contain" />
               </div>
             </div>
             <div>

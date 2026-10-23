@@ -9,7 +9,13 @@ function getStoredProducts() {
     const data = localStorage.getItem(STORAGE_KEY);
     if (data) {
       const parsed = JSON.parse(data);
-      if (Array.isArray(parsed)) return parsed;
+      if (Array.isArray(parsed)) {
+        const products = parsed.filter((product) => !/^SG\d{3}$/.test(product.id));
+        if (products.length !== parsed.length) {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
+        }
+        return products;
+      }
     }
   } catch (error) {
     console.error('Failed to read local development products:', error);

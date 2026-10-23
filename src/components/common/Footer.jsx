@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Phone, Mail, MapPin, MessageSquare, ShieldCheck, Truck, Factory, Sparkles } from 'lucide-react';
 import { CONTACT_PHONE_DISPLAY, COMPANY_EMAIL, COMPANY_ADDRESS } from '../../utils/whatsapp';
 import { useStore } from '../../context/StoreContext';
+import defaultLogo from '../../assets/Logos/Logo.jpeg';
 
 export default function Footer() {
   const { settings, settingsConfigured } = useStore();
@@ -66,9 +67,7 @@ export default function Footer() {
           <div className="lg:col-span-2 space-y-4">
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-xl bg-olive p-0.5 flex items-center justify-center">
-                {settings.logo
-                  ? <img src={settings.logo} alt="" className="w-full h-full rounded-lg object-contain" />
-                  : <span className="font-black text-ivory text-sm">SSG</span>}
+                <img src={settings.logo || defaultLogo} alt="" className="w-full h-full rounded-lg object-contain" />
               </div>
               <span className="text-lg font-bold text-ivory tracking-tight">
                 {settings.businessName}

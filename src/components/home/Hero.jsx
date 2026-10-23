@@ -106,11 +106,11 @@ export default function Hero() {
                 <div className="absolute bottom-6 left-6 right-6 bg-white/95 backdrop-blur-md rounded-2xl p-4 border border-sand-200 shadow-xl flex items-center justify-between">
                   <div>
                     <div className="text-xs text-olive font-semibold">Tiruppur Special</div>
-                    <div className="text-charcoal text-sm font-bold">Bio-Washed 180 GSM Tee</div>
-                    <div className="text-xs text-charcoal-500 mt-0.5">Starting at ₹499</div>
+                    <div className="text-charcoal text-sm font-bold">Explore Our Collection</div>
+                    <div className="text-xs text-charcoal-500 mt-0.5">Browse available styles</div>
                   </div>
                   <Link
-                    to="/products/SG001"
+                    to="/products"
                     className="p-2.5 rounded-xl bg-olive hover:bg-olive-600 text-white shadow-md shadow-olive/20"
                   >
                     <ArrowRight className="w-4 h-4" />

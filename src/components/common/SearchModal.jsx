@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, X, ArrowRight, Tag } from 'lucide-react';
-import { products } from '../../data/products';
+import { productService } from '../../services/productService';
 
 export default function SearchModal({ isOpen, onClose }) {
   const [searchTerm, setSearchTerm] = useState('');
+  const [products, setProducts] = useState(null);
+  const [error, setError] = useState('');
   const inputRef = useRef(null);
   const navigate = useNavigate();
 
@@ -12,6 +14,24 @@ export default function SearchModal({ isOpen, onClose }) {
     if (isOpen) {
       setTimeout(() => inputRef.current?.focus(), 100);
       document.body.style.overflow = 'hidden';
+      let active = true;
+      productService.getAllProducts()
+        .then((loadedProducts) => {
+          if (active) {
+            setProducts(loadedProducts.filter((product) => product.status === 'published'));
+            setError('');
+          }
+        })
+        .catch((loadError) => {
+          if (active) {
+            setError(loadError.message || 'The catalogue could not be loaded.');
+            console.error('Unable to load products for search:', loadError);
+          }
+        });
+      return () => {
+        active = false;
+        document.body.style.overflow = 'unset';
+      };
     } else {
       document.body.style.overflow = 'unset';
     }
@@ -22,13 +42,13 @@ export default function SearchModal({ isOpen, onClose }) {
 
   if (!isOpen) return null;
 
-  const filteredProducts = searchTerm.trim() === '' ? [] : products.filter((p) => {
+  const filteredProducts = searchTerm.trim() === '' || !products ? [] : products.filter((p) => {
     const term = searchTerm.toLowerCase();
     return (
-      p.name.toLowerCase().includes(term) ||
-      p.category.toLowerCase().includes(term) ||
-      p.material.toLowerCase().includes(term) ||
-      p.description.toLowerCase().includes(term)
+      p.name?.toLowerCase().includes(term) ||
+      p.category?.toLowerCase().includes(term) ||
+      p.material?.toLowerCase().includes(term) ||
+      p.description?.toLowerCase().includes(term)
     );
   });
 
@@ -89,6 +109,10 @@ export default function SearchModal({ isOpen, onClose }) {
                 ))}
               </div>
             </div>
+          ) : error ? (
+            <p role="alert" className="text-center py-10 text-sm text-rose-700">{error}</p>
+          ) : products === null && !error ? (
+            <p role="status" className="text-center py-10 text-sm text-charcoal-500">Loading catalogue…</p>
           ) : filteredProducts.length > 0 ? (
             <div className="space-y-2">
               <p className="text-xs text-charcoal-500 uppercase tracking-wider font-semibold px-2">
@@ -100,11 +124,15 @@ export default function SearchModal({ isOpen, onClose }) {
                   onClick={() => handleSelectProduct(product)}
                   className="flex items-center gap-4 p-3 rounded-2xl bg-white hover:bg-sand-50 border border-sand-200 hover:border-olive/50 transition-all cursor-pointer group shadow-2xs"
                 >
-                  <img
-                    src={product.images[0]}
-                    alt={product.name}
-                    className="w-14 h-14 object-cover rounded-xl border border-sand-200 shrink-0"
-                  />
+                  {product.images?.[0] ? (
+                    <img
+                      src={product.images[0]}
+                      alt={product.name}
+                      className="w-14 h-14 object-cover rounded-xl border border-sand-200 shrink-0"
+                    />
+                  ) : (
+                    <div className="w-14 h-14 rounded-xl border border-sand-200 bg-sand-100 shrink-0" />
+                  )}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
                       <span className="text-xs uppercase font-semibold text-olive bg-sand-100 px-2 py-0.5 rounded-md">
@@ -124,7 +152,7 @@ export default function SearchModal({ isOpen, onClose }) {
                     </p>
                   </div>
                   <div className="text-right shrink-0">
-                    <div className="text-sm font-bold text-charcoal">₹{product.price}</div>
+                    <div className="text-sm font-bold text-charcoal">{product.price != null ? `₹${product.price}` : 'Enquire'}</div>
                     <div className="text-[10px] text-olive font-semibold flex items-center gap-1 group-hover:translate-x-1 transition-transform">
                       View details <ArrowRight className="w-3 h-3" />
                     </div>
