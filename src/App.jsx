@@ -25,6 +25,7 @@ import AdminProductForm from './pages/admin/AdminProductForm';
 import AdminCategories from './pages/admin/AdminCategories';
 import AdminContent from './pages/admin/AdminContent';
 import AdminSettings from './pages/admin/AdminSettings';
+import AdminResetPassword from './pages/admin/AdminResetPassword';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -86,6 +87,7 @@ export default function App() {
                 <Route path="/admin/enquiries" element={<AdminEnquiries />} />
                 <Route path="/admin/content" element={<AdminContent />} />
                 <Route path="/admin/settings" element={<AdminSettings />} />
+                <Route path="/admin/reset-password" element={<AdminResetPassword />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </MainLayout>

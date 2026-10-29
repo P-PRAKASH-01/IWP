@@ -5,6 +5,7 @@ const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
+  const [adminUser, setAdminUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -17,6 +18,7 @@ export function AuthProvider({ children }) {
     const checkAdmin = async (user) => {
       if (!user) {
         if (active) {
+          setAdminUser(null);
           setIsAdminLoggedIn(false);
           setIsLoading(false);
         }
@@ -33,6 +35,7 @@ export function AuthProvider({ children }) {
         console.error('Unable to verify admin access:', error.message);
       }
       if (active) {
+        setAdminUser(user);
         setIsAdminLoggedIn(!error && Boolean(data));
         setIsLoading(false);
       }
@@ -80,6 +83,7 @@ export function AuthProvider({ children }) {
       };
     }
 
+    setAdminUser(data.user);
     setIsAdminLoggedIn(true);
     return { success: true };
   };
@@ -88,6 +92,7 @@ export function AuthProvider({ children }) {
     if (!supabase) return;
     const { error } = await supabase.auth.signOut();
     if (error) throw error;
+    setAdminUser(null);
     setIsAdminLoggedIn(false);
   };
 
@@ -121,12 +126,13 @@ export function AuthProvider({ children }) {
           : profileError?.message || 'This account is not authorized to administer the store.'
       };
     }
+    setAdminUser(data.user);
     setIsAdminLoggedIn(true);
-    return { success: true };
+    return { success: true, message: 'Password updated successfully.' };
   };
 
   return (
-    <AuthContext.Provider value={{ isAdminLoggedIn, isLoading, login, logout, resetPassword, updatePassword }}>
+    <AuthContext.Provider value={{ adminUser, isAdminLoggedIn, isLoading, login, logout, resetPassword, updatePassword }}>
       {children}
     </AuthContext.Provider>
   );

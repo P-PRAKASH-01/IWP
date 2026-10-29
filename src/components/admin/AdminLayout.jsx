@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import {
-  LayoutDashboard, LogOut, Menu, MessageSquare, Package, Settings, Store, Tags, X, PanelsTopLeft
+  LayoutDashboard, LogOut, Menu, MessageSquare, Package, Settings, Store, Tags, X, PanelsTopLeft, KeyRound
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
@@ -11,7 +11,8 @@ const navItems = [
   { label: 'Categories', path: '/admin/categories', icon: Tags },
   { label: 'Enquiries', path: '/admin/enquiries', icon: MessageSquare },
   { label: 'Homepage content', path: '/admin/content', icon: PanelsTopLeft },
-  { label: 'Store settings', path: '/admin/settings', icon: Settings }
+  { label: 'Store settings', path: '/admin/settings', icon: Settings },
+  { label: 'Reset password', path: '/admin/reset-password', icon: KeyRound }
 ];
 
 export default function AdminLayout({ children }) {

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { ImagePlus } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { ImagePlus, KeyRound } from 'lucide-react';
 import AdminLayout from '../../components/admin/AdminLayout';
 import { storeService } from '../../services/storeService';
 import { useStore } from '../../context/StoreContext';
@@ -190,6 +191,26 @@ export default function AdminSettings() {
             <div className="flex justify-end"><button type="submit" disabled={saving} className="rounded-xl bg-olive px-5 py-2.5 text-sm font-bold text-white disabled:opacity-50">{saving ? 'Saving…' : 'Save store information'}</button></div>
           </form>
         )}
+
+
+        <section className="bg-white rounded-2xl border border-sand-300 p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <h2 className="font-bold text-sm text-charcoal flex items-center gap-2">
+              <KeyRound className="w-4 h-4 text-olive" /> Administrator Password & Security
+            </h2>
+            <p className="text-xs text-charcoal-600 mt-0.5">
+              Need to change your admin password or trigger a password reset? Manage your credentials securely.
+            </p>
+          </div>
+          <Link
+            to="/admin/reset-password"
+            className="inline-flex items-center gap-2 rounded-xl bg-sand-100 hover:bg-sand-200 text-charcoal font-semibold px-4 py-2 text-xs border border-sand-300 transition-colors"
+          >
+            <KeyRound className="w-3.5 h-3.5 text-olive" />
+            <span>Reset Administrator Password</span>
+          </Link>
+        </section>
+
       </div>
     </AdminLayout>
   );

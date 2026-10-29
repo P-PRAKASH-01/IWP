@@ -97,9 +97,13 @@ export default function Hero() {
               {/* Main Stacked Image Frame */}
               <div className="relative rounded-3xl overflow-hidden border border-sand-300 p-3 bg-white shadow-xl">
                 <img
-                  src="https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=1000&q=80"
-                  alt="Sri Sai Garments Featured Cotton Tee"
+                  src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&w=1000&q=80"
+                  alt="Sri Sai Garments Pure Cotton Apparel Collection"
                   className="w-full aspect-[4/5] object-cover rounded-2xl"
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = 'https://images.unsplash.com/photo-1562157873-818bc0726f68?auto=format&fit=crop&w=1000&q=80';
+                  }}
                 />
                 
                 {/* Floating Glass Overlay Card 1 */}

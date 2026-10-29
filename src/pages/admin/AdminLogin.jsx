@@ -14,7 +14,7 @@ export default function AdminLogin() {
   const { login, resetPassword, updatePassword } = useAuth();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const passwordRecovery = searchParams.get('mode') === 'recovery';
+  const passwordRecovery = searchParams.get('mode') === 'recovery' || (typeof window !== 'undefined' && window.location.hash.includes('type=recovery'));
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -140,14 +140,23 @@ export default function AdminLogin() {
             <span>{busy ? 'Please wait…' : passwordRecovery ? 'Save new password' : 'Sign in'}</span>
             <ArrowRight className="w-4 h-4" aria-hidden="true" />
           </button>
-          {!passwordRecovery && <button
+          {!passwordRecovery ? <button
               type="button"
               disabled={busy || !isSupabaseConfigured}
               onClick={handlePasswordReset}
               className="w-full text-xs font-semibold text-olive hover:underline disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-olive rounded"
             >
               Forgot password?
-            </button>}
+            </button> : (
+            <button
+              type="button"
+              disabled={busy}
+              onClick={() => navigate('/admin/login', { replace: true })}
+              className="w-full text-xs font-semibold text-charcoal-500 hover:text-charcoal hover:underline rounded text-center"
+            >
+              Back to sign in
+            </button>
+          )}
         </form>
       </div>
     </main>
