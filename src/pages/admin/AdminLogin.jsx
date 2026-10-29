@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { AlertCircle, ArrowRight, KeyRound, Lock, Mail } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { isSupabaseConfigured } from '../../services/supabase';
@@ -140,14 +140,16 @@ export default function AdminLogin() {
             <span>{busy ? 'Please wait…' : passwordRecovery ? 'Save new password' : 'Sign in'}</span>
             <ArrowRight className="w-4 h-4" aria-hidden="true" />
           </button>
-          {!passwordRecovery ? <button
-              type="button"
-              disabled={busy || !isSupabaseConfigured}
-              onClick={handlePasswordReset}
-              className="w-full text-xs font-semibold text-olive hover:underline disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-olive rounded"
-            >
-              Forgot password?
-            </button> : (
+          {!passwordRecovery ? (
+            <div className="text-center pt-1">
+              <Link
+                to="/admin/reset-password"
+                className="text-xs font-semibold text-olive hover:underline"
+              >
+                Forgot password? Reset here
+              </Link>
+            </div>
+          ) : (
             <button
               type="button"
               disabled={busy}
