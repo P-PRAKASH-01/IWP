@@ -121,7 +121,7 @@ The browser uses only the project URL and public anon/publishable key. PostgreSQ
 
 ### Data model
 
-The migration [`202610140001_store_admin.sql`](./supabase/migrations/202610140001_store_admin.sql) defines the core database model:
+The migration [`20261014180254_store_admin_schema.sql`](./supabase/migrations/20261014180254_store_admin_schema.sql) defines the core database model:
 
 | Entity | Relationship and purpose |
 |---|---|
@@ -192,7 +192,7 @@ npm run preview
 ## 7. Supabase and Administrator Setup
 
 1. Create a Supabase project. Use its project URL and public anon/publishable key as the frontend configuration values.
-2. Apply [`supabase/migrations/202610140001_store_admin.sql`](./supabase/migrations/202610140001_store_admin.sql) using the Supabase SQL Editor or your established Supabase CLI migration workflow. It creates the tables, constraints, indexes, updated-at triggers, RLS policies, and `product-media` bucket.
+2. Apply [`supabase/migrations/20261014180254_store_admin_schema.sql`](./supabase/migrations/20261014180254_store_admin_schema.sql) using the Supabase SQL Editor or your established Supabase CLI migration workflow. It creates the tables, constraints, indexes, updated-at triggers, RLS policies, and `product-media` bucket.
 3. In Supabase Auth, disable public sign-ups. Configure allowed site/redirect URLs for local development and the deployed origin. Configure SMTP/password-reset delivery before relying on password recovery.
 4. Create an administrator account through Supabase Auth user management. Then, as a trusted project owner, grant its UUID an administrator profile. Replace the placeholder email with the intended admin account:
 
